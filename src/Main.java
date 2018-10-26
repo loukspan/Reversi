@@ -1,13 +1,13 @@
-import GUI.OthelloBoard;
+import GUI.ReversiBoard;
 
 public class Main {
 	
 
 	public static void main(String[] args) {
-		OthelloBoard othelloBoard = new OthelloBoard();
-		char[][] myBoard = new char[8][8];
-		othelloBoard.InitialState(myBoard );
-		othelloBoard.PrintB(myBoard);
+		ReversiBoard ReversiBoard = new ReversiBoard();
+		char[][] myBoard = new char[9][9];
+		ReversiBoard.InitialState(myBoard);
+		ReversiBoard.PrintB(myBoard);
 
 	}
 
