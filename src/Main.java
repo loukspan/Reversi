@@ -27,7 +27,7 @@ public class Main {
         
 		//X=white, O=black
 		GamePlayer WPlayer = new GamePlayer(maxDepth, Board.W); //PC
-		GamePlayer BPlayer = new GamePlayer(maxDepth, Board.B); //Player
+		//GamePlayer BPlayer = new GamePlayer(maxDepth, Board.B); //Player
 		Board board = new Board();
 
 		//Ask who will play first
@@ -50,11 +50,21 @@ public class Main {
                 //If W (PC) played last, then B (Player) plays now
 				case Board.W:
                     System.out.println("B moves");
-                    System.out.println("Enter number of row");
-                    int row = sc.nextInt();
-                    System.out.println("Enter number of column");
-                    int col = sc.nextInt();				
-					board.makeMove(row, col, Board.B);
+                    System.out.println("Enter position (e.g. A-1)");
+                    String position = sc.next();
+                    String[] parts = position.split("-");
+                    int col = -1;
+            		if(parts[0].equals("A")) {col = 0;}
+            		else if(parts[0].equals("B")) {col = 3;}
+            		else if(parts[0].equals("C")) {col = 4;}
+            		else if(parts[0].equals("D")) {col = 5;}
+            		else if(parts[0].equals("E")) {col = 6;}
+            		else if(parts[0].equals("F")) {col = 7;}
+            		else if(parts[0].equals("G")) {col = 8;}
+            		else if(parts[0].equals("H")) {col = 9;}  
+            		else System.out.println("Invalid Position");	
+                    int row = Integer.parseInt(parts[1])-1;
+    				board.makeMove(row, col, Board.B);
 					break;
                 //If B (Player) played last, then W (PC) plays now
 				case Board.B:

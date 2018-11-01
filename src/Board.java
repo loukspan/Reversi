@@ -91,7 +91,7 @@ public class Board
 
     //Make a move; it places a letter in the board
 	public void makeMove(int row, int col, int letter)
-	{
+	{	
 		gameBoard[row][col] = letter;
 		lastMove = new Move(row, col);
 		lastLetterPlayed = letter;
