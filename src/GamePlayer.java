@@ -20,6 +20,8 @@ public class GamePlayer
 		this.playerLetter = playerLetter;
 	}
 
+	
+	
     //Initiates the MiniMax algorithm
 	public Move MiniMax(Board board)
 	{
@@ -34,7 +36,7 @@ public class GamePlayer
             return min(new Board(board), 0);
         }
 	}
-
+	
     // The max and min functions are called interchangingly, one after another until a max depth is reached
 	public Move max(Board board, int depth)
 	{

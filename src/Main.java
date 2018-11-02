@@ -23,8 +23,8 @@ public class Main {
 		//Ask maxDepth (default = 2)
 		int maxDepth = 2;
 		System.out.println("Enter MaxDepth for the MiniMax algorithm: ");
-        maxDepth = sc.nextInt();        
-        
+		maxDepth = sc.nextInt();
+
 		//X=white, O=black
 		GamePlayer WPlayer = new GamePlayer(maxDepth, Board.W); //PC
 		//GamePlayer BPlayer = new GamePlayer(maxDepth, Board.B); //Player
@@ -55,15 +55,16 @@ public class Main {
                     String[] parts = position.split("-");
                     int col = -1;
             		if(parts[0].equals("A")) {col = 0;}
-            		else if(parts[0].equals("B")) {col = 3;}
-            		else if(parts[0].equals("C")) {col = 4;}
-            		else if(parts[0].equals("D")) {col = 5;}
-            		else if(parts[0].equals("E")) {col = 6;}
-            		else if(parts[0].equals("F")) {col = 7;}
-            		else if(parts[0].equals("G")) {col = 8;}
-            		else if(parts[0].equals("H")) {col = 9;}  
+            		else if(parts[0].equals("B")) {col = 1;}
+            		else if(parts[0].equals("C")) {col = 2;}
+            		else if(parts[0].equals("D")) {col = 3;}
+            		else if(parts[0].equals("E")) {col = 4;}
+            		else if(parts[0].equals("F")) {col = 5;}
+            		else if(parts[0].equals("G")) {col = 6;}
+            		else if(parts[0].equals("H")) {col = 7;}  
             		else System.out.println("Invalid Position");	
                     int row = Integer.parseInt(parts[1])-1;
+                   
     				board.makeMove(row, col, Board.B);
 					break;
                 //If B (Player) played last, then W (PC) plays now
