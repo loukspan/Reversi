@@ -1,9 +1,13 @@
 import java.util.ArrayList;
+import java.util.Scanner;
 
 public class Board
 {
+	
+	Scanner sc = new Scanner(System.in);
+	
     //Variables for the Boards values
-	//X=white, O=black
+	//W=white, B=black
 	public static final int W = 1;
 	public static final int B = -1;
 	public static final int EMPTY = 0;
@@ -88,13 +92,47 @@ public class Board
 			}
 		}
 	}
-
-    //Make a move; it places a letter in the board
-	public void makeMove(int row, int col, int letter)
-	{	
-		gameBoard[row][col] = letter;
-		lastMove = new Move(row, col);
-		lastLetterPlayed = letter;
+	
+	public boolean noMoves(int letter){
+		//The children-moves of the state are calculated
+		ArrayList<Board> children = new ArrayList<Board>(getChildren(letter));
+		if(children.isEmpty()){
+			//Thelei tsekarisma
+			return true;
+		}
+		return false;
+	}
+	
+	public void handleEntrance(){
+		if(noMoves(Board.B)){
+			System.out.println("Black has no moves");
+			lastLetterPlayed = Board.B;
+		}
+		else{
+			while(true){
+	        	System.out.println("B moves");
+	        	System.out.println("Enter position (e.g. A-1)");
+	        	String position = sc.next();
+	        	String[] parts = position.split("-");
+	        	int row = Integer.parseInt(parts[1])-1;	
+	        	int col = -1;
+	        	if(parts[0].equals("A")) {col = 0;}
+	        	else if(parts[0].equals("B")) {col = 1;}
+	        	else if(parts[0].equals("C")) {col = 2;}
+	        	else if(parts[0].equals("D")) {col = 3;}
+	        	else if(parts[0].equals("E")) {col = 4;}
+	        	else if(parts[0].equals("F")) {col = 5;}
+	        	else if(parts[0].equals("G")) {col = 6;}
+	        	else if(parts[0].equals("H")) {col = 7;}
+	        	if(isValidMove(row, col, Board.B)) {        		
+	            	makeMove(row, col, Board.B);
+	            	break;
+	            }
+	        	else{
+	        		System.out.println("Invalid Position, please try again");	
+	        	}
+	        }
+		}
 	}
 
 	public boolean isValidUp(int row, int col, int letter){
@@ -246,46 +284,11 @@ public class Board
 
 	public boolean isValid(int row, int col, int letter)
 	{
-		if (isValidUpRight(row, col, letter) || isValidUp(row, col, letter) || isValidRight(row, col, letter) || isValidRightDown(row, col, letter) || isValidDown(row, col, letter) || isValidDownLeft(row, col, letter) || isValidLeft(row, col, letter) || isValidLeftUp(row, col, letter))
+		if (isValidUp(row, col, letter) || isValidUpRight(row, col, letter) || isValidRight(row, col, letter) || isValidRightDown(row, col, letter) || isValidDown(row, col, letter) || isValidDownLeft(row, col, letter) || isValidLeft(row, col, letter) || isValidLeftUp(row, col, letter))
 		{
 			return true;
 		}
-/*
-		if (isValidUpRight(row, col, letter))
-		{
-			return true;
-		}
-
-		if (isValidRight(row, col, letter))
-		{
-			return true;
-		}
-
-		if (isValidRightDown(row, col, letter))
-		{
-			return true;
-		}
-
-		if (isValidDown(row, col, letter))
-		{
-			return true;
-		}
-
-		if (isValidDownLeft(row, col, letter))
-		{
-			return true;
-		}
-
-		if (isValidLeft(row, col, letter))
-		{
-			return true;
-		}
-
-		if (isValidLeftUp(row, col, letter))
-		{
-			return true;
-		}
-		*/
+		
 		return false;
 	}
 
@@ -301,13 +304,103 @@ public class Board
 		{
 			return false;
 		}
-		if (!isValid(row, col, letter))
+		if (!isValidUp(row, col, letter) && !isValidUpRight(row, col, letter) && !isValidRight(row, col, letter) && !isValidRightDown(row, col, letter) && !isValidDown(row, col, letter) && !isValidDownLeft(row, col, letter) && !isValidLeft(row, col, letter) && !isValidLeftUp(row, col, letter))
 		{
 			return false;
 		}
 		return true;
 	}
 
+	//Make a move; it places a letter in the board
+		public void makeMove(int row, int col, int letter)
+		{			
+			gameBoard[row][col] = letter;
+			lastMove = new Move(row, col);
+			lastLetterPlayed = letter;
+			
+			if (isValidUp(row, col, letter)){
+				int i = row-1;
+				while(gameBoard[i][col] != letter) //while up there is an opponent's pawn
+				{
+					gameBoard[i][col] = letter; //Change opponent's pawn in player's
+					i--;
+				}			
+			}
+			
+			if (isValidUpRight(row, col, letter)){
+				int i = row-1;
+				int j = col+1;
+				while(gameBoard[i][j] != letter) //while up there is an opponent's pawn
+				{
+					gameBoard[i][j] = letter; //Change opponent's pawn in player's
+					i--;
+					j++;
+				}	
+			}
+			
+			if (isValidRight(row, col, letter)){
+				int i = col+1;
+				while(gameBoard[row][i] != letter) //while up there is an opponent's pawn
+				{
+					gameBoard[row][i] = letter; //Change opponent's pawn in player's
+					i++;
+				}	
+			}
+
+			if (isValidRightDown(row, col, letter)){
+				int i = row+1;
+				int j = col+1;
+				while(gameBoard[i][j] != letter) //while up there is an opponent's pawn
+				{
+					gameBoard[i][j] = letter; //Change opponent's pawn in player's
+					i++;
+					j++;
+				}
+			}
+
+			if (isValidDown(row, col, letter)){
+				int i = row+1;
+				while(gameBoard[i][col] != letter) //while up there is an opponent's pawn
+				{
+					gameBoard[i][col] = letter; //Change opponent's pawn in player's
+					i++;
+				}	
+			}
+
+			if (isValidDownLeft(row, col, letter)){
+				int i = row+1;
+				int j = col-1;
+				while(gameBoard[i][j] != letter) //while up there is an opponent's pawn
+				{
+					gameBoard[i][j] = letter; //Change opponent's pawn in player's
+					i++;
+					j--;
+				}
+			}
+
+			if (isValidLeft(row, col, letter)){
+				int i = col-1;
+				while(gameBoard[row][i] != letter) //while up there is an opponent's pawn
+				{
+					gameBoard[row][i] = letter; //Change opponent's pawn in player's
+					i--;
+				}	
+			}
+
+			if (isValidLeftUp(row, col, letter)){
+				int i = row-1;
+				int j = col-1;
+				while(gameBoard[i][j] != letter) //while up there is an opponent's pawn
+				{
+					gameBoard[i][j] = letter; //Change opponent's pawn in player's
+					i--;
+					j--;
+				}
+			}
+			
+			
+		}
+	
     /* Generates the children of the state
      * Any square in the board that is empty results to a child
      */
@@ -326,13 +419,6 @@ public class Board
 				}
 			}
 		}
-
-		/*for(int i=0; i<children.size(); i++)
-		{
-				System.out.println(children.get(i));
-
-		}
-*/
 		return children;
 	}
 
@@ -437,37 +523,6 @@ public class Board
      */
     public boolean isTerminal()
     {
-    	
-       /* //Checking if there is a horizontal tic-tac-toe
-		for(int row=0; row<3; row++)
-		{
-    		if((gameBoard[row][0] == gameBoard[row][1]) && (gameBoard[row][1] == gameBoard[row][2]) && (gameBoard[row][0] != EMPTY))
-			{
-                return true;
-			}
-		}
-
-        //Checking if there is a vertical tic-tac-toe
-		for(int col=0; col<3; col++)
-		{
-    		if((gameBoard[0][col] == gameBoard[1][col]) && (gameBoard[1][col] == gameBoard[2][col]) && (gameBoard[0][col] != EMPTY))
-			{
-                return true;
-			}
-		}
-
-        //Checking if there is a diagonal tic-tac-toe
-        if((gameBoard[0][0] == gameBoard[1][1]) && (gameBoard[1][1] == gameBoard[2][2]) && (gameBoard[1][1] != EMPTY))
-		{
-            return true;
-        }
-        if((gameBoard[0][2] == gameBoard[1][1]) && (gameBoard[1][1] == gameBoard[2][0]) && (gameBoard[1][1] != EMPTY))
-		{
-            return true;
-        }
-        */
-
-
         //Checking if there is at least one empty tile
         for(int row=0; row<8; row++)
 		{
@@ -478,12 +533,38 @@ public class Board
                     return false;
                 }
             }
+		}        
+        //thelei tsekarisma
+        //Check if there is no available moves
+        if(!noMoves(Board.W) || !noMoves(Board.B)){
+        	return false;
         }
+        
         return true;
-
-        //na valw na teleiwnei k otan de mporei kaneis na kanei kinisi
     }
 
+    //Finds the winner
+    public String winner(){
+    	int sumW = 0;
+        int sumB = 0;
+        String winner = "White";
+        for(int row=0; row<8; row++){
+        	for(int col=0; col<8; col++){
+        		if(gameBoard[row][col] == W){
+                    sumW++;
+                }
+        		if(gameBoard[row][col] == B){
+                    sumB++;
+        		}
+ 			}
+        }
+        if(sumB>sumW){
+        	winner = "Black";
+        }
+        return "Total white = "+sumW+", total black = "+sumB+", the winner is "+winner;
+    }
+    
+    
     //Prints the board
 	public void print()
 	{
@@ -513,4 +594,5 @@ public class Board
 		}
 		System.out.println("*******************");
 	}
+	
 }
