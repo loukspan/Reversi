@@ -38,6 +38,9 @@ public class Main {
 			{
                 //If W (PC) played last, then B (Player) plays now
 				case Board.W:
+					board.placeAvailablePositions(Board.B);
+					board.print();
+					board.removeAvailablePositions(Board.B);
 					board.handleEntrance();
 					break;
                 //If B (Player) played last, then W (PC) plays now

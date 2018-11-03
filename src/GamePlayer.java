@@ -1,12 +1,21 @@
 import java.util.ArrayList;
 import java.util.Random;
 
+
+//a-b
+//dfs
+//euretikes getValue()
+
 public class GamePlayer
 {
     //Variable that holds the maximum depth the MiniMax algorithm will reach for this player
 	private int maxDepth;
     //Variable that holds which letter this player controls
 	private int playerLetter;
+	//max barrier 
+	private int a;
+	//min barrier 
+	private int b;
 	
 	public GamePlayer()
 	{
@@ -60,6 +69,7 @@ public class GamePlayer
             //The child-move with the greatest value is selected and returned by max
 			if(move.getValue() >= maxMove.getValue())
 			{
+				a = move.getValue();
                 if ((move.getValue() == maxMove.getValue()))
                 {
                     //If the heuristic has the save value then we randomly choose one of the two moves
@@ -76,7 +86,13 @@ public class GamePlayer
                     maxMove.setCol(child.getLastMove().getCol());
                     maxMove.setValue(move.getValue());
                 }
+                if(maxMove.getValue() <= b){
+    				return maxMove;
+    			}	
 			}
+			if(maxMove.getValue() <= b){
+				return maxMove;
+			}			
 		}
 		return maxMove;
 	}
@@ -98,6 +114,7 @@ public class GamePlayer
 			Move move = max(child, depth + 1);
 			if(move.getValue() <= minMove.getValue())
 			{
+				b = move.getValue();//b=7 a=8
                 if ((move.getValue() == minMove.getValue()))
                 {
                     if (r.nextInt(2) == 0)
@@ -114,7 +131,10 @@ public class GamePlayer
                         minMove.setValue(move.getValue());
                 }
             }
-        }
+			if(minMove.getValue() <= a){
+				return minMove;
+			}
+		}
         return minMove;
     }
 }

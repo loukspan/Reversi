@@ -7,10 +7,11 @@ public class Board
 	Scanner sc = new Scanner(System.in);
 	
     //Variables for the Boards values
-	//W=white, B=black
+	//W=white, B=black, available = available moves as "."
 	public static final int W = 1;
 	public static final int B = -1;
 	public static final int EMPTY = 0;
+	public static final int available = 2;
     
     //Immediate move that lead to this board
     private Move lastMove;
@@ -137,9 +138,9 @@ public class Board
 
 	public boolean isValidUp(int row, int col, int letter){
 		if(row > 1){																//if row <= 1 - sure not valid
-			if(gameBoard[row-1][col] != letter && gameBoard[row-1][col] != EMPTY){	//if up there is an opponent's pawn
+			if(gameBoard[row-1][col] != letter && gameBoard[row-1][col] != EMPTY && gameBoard[row-1][col] != available){	//if up there is an opponent's pawn
 				for(int i=row-1; i>0; i--){ 										//then search from that pawn to edge
-					if (gameBoard[i-1][col] == EMPTY){								//if you find EMPTY - not valid
+					if (gameBoard[i-1][col] == EMPTY || gameBoard[row-1][col] == available){								//if you find EMPTY - not valid
 						return false;
 					}
 					if (gameBoard[i-1][col] == letter){ 							//if there is a player's pawn
@@ -153,11 +154,11 @@ public class Board
 	
 	public boolean isValidUpRight(int row, int col, int letter){
 		if(row > 1 && col < 6){															//check if there is room up and right
-			if(gameBoard[row-1][col+1] != letter && gameBoard[row-1][col+1] != EMPTY){	//if up there is an opponent's pawn
+			if(gameBoard[row-1][col+1] != letter && gameBoard[row-1][col+1] != EMPTY && gameBoard[row-1][col+1] != available){	//if up there is an opponent's pawn
 				row--;
 				col++;
 				while(row>0 && col<7){
-					if (gameBoard[row-1][col+1] == EMPTY){								//if you find EMPTY - not valid
+					if (gameBoard[row-1][col+1] == EMPTY || gameBoard[row-1][col+1] == available){								//if you find EMPTY - not valid
 						return false;
 					}
 					if (gameBoard[row-1][col+1] == letter){ 							//if there is a player's pawn
@@ -173,9 +174,9 @@ public class Board
 	
 	public boolean isValidRight(int row, int col, int letter){
 		if(col < 6){																//if col < 6 - sure not valid
-			if(gameBoard[row][col+1] != letter && gameBoard[row][col+1] != EMPTY){	//if right there is an opponent's pawn
+			if(gameBoard[row][col+1] != letter && gameBoard[row][col+1] != EMPTY && gameBoard[row][col+1] != available){	//if right there is an opponent's pawn
 				for(int i=col+1; i<7; i++){ 										//then search from that pawn to edge
-					if (gameBoard[row][i+1] == EMPTY){								//if you find EMPTY - not valid
+					if (gameBoard[row][i+1] == EMPTY || gameBoard[row][col+1] == available){								//if you find EMPTY - not valid
 						return false;
 					}
 					if (gameBoard[row][i+1] == letter){ 							//if there is a player's pawn
@@ -190,11 +191,11 @@ public class Board
 	
 	public boolean isValidRightDown(int row, int col, int letter){
 		if(row < 6 && col < 6){															//check if there is room right and down
-			if(gameBoard[row+1][col+1] != letter && gameBoard[row+1][col+1] != EMPTY){	//if up there is an opponent's pawn
+			if(gameBoard[row+1][col+1] != letter && gameBoard[row+1][col+1] != EMPTY && gameBoard[row+1][col+1] != available){	//if up there is an opponent's pawn
 				row++;
 				col++;
 				while(row<7 && col<7){
-					if (gameBoard[row+1][col+1] == EMPTY){								//if you find EMPTY - not valid
+					if (gameBoard[row+1][col+1] == EMPTY || gameBoard[row+1][col+1] == available){								//if you find EMPTY - not valid
 						return false;
 					}
 					if (gameBoard[row+1][col+1] == letter){ 							//if there is a player's pawn
@@ -210,9 +211,9 @@ public class Board
 	
 	public boolean isValidDown(int row, int col, int letter){
 		if(row < 6){																//if row < 6 - sure not valid
-			if(gameBoard[row+1][col] != letter && gameBoard[row+1][col] != EMPTY){	//if down there is an opponent's pawn
+			if(gameBoard[row+1][col] != letter && gameBoard[row+1][col] != EMPTY && gameBoard[row+1][col] != available){	//if down there is an opponent's pawn
 				for(int i=row+1; i<7; i++){ 										//then search from that pawn to edge
-					if (gameBoard[i+1][col] == EMPTY){							//if you find EMPTY - not valid
+					if (gameBoard[i+1][col] == EMPTY || gameBoard[row+1][col] == available){							//if you find EMPTY - not valid
 						return false;
 					}
 					if (gameBoard[i+1][col] == letter){ 							//if there is a player's pawn
@@ -226,11 +227,11 @@ public class Board
 	
 	public boolean isValidDownLeft(int row, int col, int letter){
 		if(row < 6 && col > 1){															//check if there is room down and left
-			if(gameBoard[row+1][col-1] != letter && gameBoard[row+1][col-1] != EMPTY){	//if up there is an opponent's pawn
+			if(gameBoard[row+1][col-1] != letter && gameBoard[row+1][col-1] != EMPTY && gameBoard[row+1][col-1] != available){	//if up there is an opponent's pawn
 				row++;
 				col--;
 				while(row<7 && col>0){
-					if (gameBoard[row+1][col-1] == EMPTY){								//if you find EMPTY - not valid
+					if (gameBoard[row+1][col-1] == EMPTY || gameBoard[row+1][col-1] == available){								//if you find EMPTY - not valid
 						return false;
 					}
 					if (gameBoard[row+1][col-1] == letter){ 							//if there is a player's pawn
@@ -246,9 +247,9 @@ public class Board
 	
 	public boolean isValidLeft(int row, int col, int letter){
 		if(col > 1){																//if col > 1 - sure not valid
-			if(gameBoard[row][col-1] != letter && gameBoard[row][col-1] != EMPTY){	//if left there is an opponent's pawn
+			if(gameBoard[row][col-1] != letter && gameBoard[row][col-1] != EMPTY && gameBoard[row][col-1] != available){	//if left there is an opponent's pawn
 				for(int i=col-1; i>0; i--){ 										//then search from that pawn to edge
-					if (gameBoard[row][i-1] == EMPTY){							//if you find EMPTY - not valid
+					if (gameBoard[row][i-1] == EMPTY || gameBoard[row][col-1] == available){							//if you find EMPTY - not valid
 						return false;
 					}
 					if (gameBoard[row][i-1] == letter){ 							//if there is a player's pawn
@@ -263,11 +264,11 @@ public class Board
 	
 	public boolean isValidLeftUp(int row, int col, int letter){
 		if(row > 1 && col > 1){															//check if there is room left and up
-			if(gameBoard[row-1][col-1] != letter && gameBoard[row-1][col-1] != EMPTY){	//if up there is an opponent's pawn
+			if(gameBoard[row-1][col-1] != letter && gameBoard[row-1][col-1] != EMPTY && gameBoard[row-1][col-1] != available){	//if up there is an opponent's pawn
 				row--;
 				col--;
 				while(row>0 && col>0){
-					if (gameBoard[row-1][col-1] == EMPTY){								//if you find EMPTY - not valid
+					if (gameBoard[row-1][col-1] == EMPTY || gameBoard[row-1][col-1] == available){								//if you find EMPTY - not valid
 						return false;
 					}
 					if (gameBoard[row-1][col-1] == letter){ 							//if there is a player's pawn
@@ -300,7 +301,7 @@ public class Board
 		{
 			return false;
 		}
-		if (gameBoard[row][col] != EMPTY)
+		if (gameBoard[row][col] != EMPTY && gameBoard[row][col] != available)
 		{
 			return false;
 		}
@@ -401,6 +402,23 @@ public class Board
 			
 		}
 	
+		
+	public void	placeAvailablePositions(int letter){
+		//The children-moves of the state are calculated
+		ArrayList<Board> children = new ArrayList<Board>(getChildren(letter));
+		for (Board child : children){
+			gameBoard[child.getLastMove().getRow()][child.getLastMove().getCol()] = available;
+		}
+	}
+	
+	public void removeAvailablePositions(int letter){
+		//The children-moves of the state are calculated
+		ArrayList<Board> children = new ArrayList<Board>(getChildren(letter));
+		for (Board child : children){
+			gameBoard[child.getLastMove().getRow()][child.getLastMove().getCol()] = EMPTY;
+		}
+	}
+		
     /* Generates the children of the state
      * Any square in the board that is empty results to a child
      */
@@ -430,91 +448,8 @@ public class Board
      */
 	public int evaluate()
 	{
-		int Xlines = 0;
-		int Olines = 0;
-        int sum;
-
-        //Checking rows
-		for(int row=0; row<8; row++)
-		{
-            sum = gameBoard[row][0] + gameBoard[row][1] + gameBoard[row][2] + gameBoard[row][3] + gameBoard[row][4] + gameBoard[row][5] + gameBoard[row][6] + gameBoard[row][7];
-            if(sum == 8)
-			{
-                Xlines = Xlines + 10;
-			}
-            else if(sum == 7)
-			{
-                Xlines++;
-			}
-            else if(sum == -8)
-			{
-                Olines = Olines + 10;
-			}
-            else if(sum == -8)
-			{
-                Olines++;
-			}
-		}
-
-        //Checking columns
-		for(int col=0; col<8; col++)
-		{
-            sum = gameBoard[0][col] + gameBoard[1][col] + gameBoard[2][col] + gameBoard[col][3] + gameBoard[col][4] + gameBoard[col][5] + gameBoard[col][6] + gameBoard[col][7];
-            if(sum == 8)
-			{
-                Xlines = Xlines + 10;
-			}
-            else if(sum == 7)
-			{
-                Xlines++;
-			}
-            else if(sum == -8)
-			{
-                Olines = Olines + 10;
-			}
-            else if(sum == -7)
-			{
-                Olines++;
-			}
-		}
-
-        //Checking  diagonals
-        sum = gameBoard[0][0] + gameBoard[1][1] + gameBoard[2][2] + gameBoard[3][3] + gameBoard[4][4] + gameBoard[5][5] + gameBoard[6][6] + gameBoard[7][7];
-        if(sum == 8)
-        {
-            Xlines = Xlines + 10;
-        }
-        else if(sum == 7)
-        {
-            Xlines++;
-        }
-        else if(sum == -8)
-        {
-            Olines = Olines + 10;
-        }
-        else if(sum == -7)
-        {
-            Olines++;
-        }
-        sum = gameBoard[0][7] + gameBoard[1][6] + gameBoard[2][5] + gameBoard[3][4] + gameBoard[4][3] + gameBoard[5][2] + gameBoard[6][1] + gameBoard[7][0];
-        if(sum == 8)
-        {
-            Xlines = Xlines + 10;
-        }
-        else if(sum == 7)
-        {
-            Xlines++;
-        }
-        else if(sum == -8)
-        {
-            Olines = Olines + 10;
-        }
-        else if(sum == -7)
-        {
-            Olines++;
-        }
-
-		return Xlines - Olines;
+		int value=0;
+		return value;
 	}
 
     /*
@@ -528,7 +463,7 @@ public class Board
 		{
 			for(int col=0; col<8; col++)
 			{
-				if(gameBoard[row][col] == EMPTY)
+				if(gameBoard[row][col] == EMPTY || gameBoard[row][col] == available)
 				{
                     return false;
                 }
@@ -585,6 +520,9 @@ public class Board
 						break;
 					case EMPTY:
 						System.out.print("- ");
+						break;
+					case available:
+						System.out.print(". ");
 						break;
 					default:
 						break;
