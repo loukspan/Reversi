@@ -45,8 +45,13 @@ public class Main {
 					break;
                 //If B (Player) played last, then W (PC) plays now
 				case Board.B:
-                    System.out.println("W moves");
+					 System.out.println("White moves");
 					Move WMove = WPlayer.MiniMax(board);
+                   
+                    board.placeAvailablePositions(Board.W);
+					board.print();
+					board.removeAvailablePositions(Board.W);
+					
 					if(board.noMoves(Board.W)){
 						System.out.println("White has no moves");
 						board.setLastLetterPlayed(Board.W);

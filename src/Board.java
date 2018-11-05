@@ -111,7 +111,7 @@ public class Board
 		}
 		else{
 			while(true){
-	        	System.out.println("B moves");
+	        	System.out.println("Black moves");
 	        	System.out.println("Enter position (e.g. A-1)");
 	        	String position = sc.next();
 	        	String[] parts = position.split("-");
@@ -446,9 +446,114 @@ public class Board
      * minus the number of the opponent's almost complete tic-tac-toes
      * Special case: if a complete tic-tac-toe is present it counts as ten
      */
-	public int evaluate()
+	public int evaluate(int row, int col, int letter)
 	{
+		System.out.println("Gameboard row "+row+" col "+col+" letter "+letter);
 		int value=0;
+		//check if available move is at the inner box
+		if(row > 1 && row < 6 && col > 1 && col < 6){
+			System.out.println("+20");
+			value += 20;
+		}
+		//Check if available move is diagonal to corners
+		if(row == 1 && col == 1 || row == 1 && col == 6 || row == 6 && col == 1 || row == 6 && col == 6){
+			System.out.println("-80");
+			value -= 80;
+		}
+		//Check if available move is next to corners
+		if(row==0 && col==1 || row==0 && col==6 || row==1 && col==0 || row==1 && col==7 || row==6 && col==0 || row==6 && col==7 || row==7 && col==1 || row==7 && col==6){
+			System.out.println("-60");
+			value -= 50;
+		}
+		//check if available move is at the edges
+		if(row == 0 || row == 7 || col == 0 || col == 7){
+			System.out.println("+40");
+			value += 50;
+		}
+		//check if available move is at the corners
+		if((row == 0 && col == 0) || (row == 0 && col == 7) || (row == 7 && col == 0) || (row == 7 && col == 7)){
+			System.out.println("+100");
+			value += 100;
+		}
+		//check how many opponent's pawns will turn
+		if(row == 0 || row == 7 || col == 0 || col == 7){
+			int sum = 0;
+			if (isValidUp(row, col, letter)){
+				int i = row-1;
+				while(gameBoard[i][col] != letter) //while up there is an opponent's pawn
+				{
+					sum++;
+					i--;
+				}			
+			}
+			if (isValidUpRight(row, col, letter)){
+				int i = row-1;
+				int j = col+1;
+				while(gameBoard[i][j] != letter) //while up there is an opponent's pawn
+				{
+					sum++;
+					i--;
+					j++;
+				}	
+			}
+			if (isValidRight(row, col, letter)){
+				int i = col+1;
+				while(gameBoard[row][i] != letter) //while up there is an opponent's pawn
+				{
+					sum++;
+					i++;
+				}	
+			}
+			if (isValidRightDown(row, col, letter)){
+				int i = row+1;
+				int j = col+1;
+				while(gameBoard[i][j] != letter) //while up there is an opponent's pawn
+				{
+					sum++;
+					i++;
+					j++;
+				}
+			}
+			if (isValidDown(row, col, letter)){
+				int i = row+1;
+				while(gameBoard[i][col] != letter) //while up there is an opponent's pawn
+				{
+					sum++;
+					i++;
+				}	
+			}
+			if (isValidDownLeft(row, col, letter)){
+				int i = row+1;
+				int j = col-1;
+				while(gameBoard[i][j] != letter) //while up there is an opponent's pawn
+				{
+					sum++;
+					i++;
+					j--;
+				}
+			}
+			if (isValidLeft(row, col, letter)){
+				int i = col-1;
+				while(gameBoard[row][i] != letter) //while up there is an opponent's pawn
+				{
+					sum++;
+					i--;
+				}	
+			}
+			if (isValidLeftUp(row, col, letter)){
+				int i = row-1;
+				int j = col-1;
+				while(gameBoard[i][j] != letter) //while up there is an opponent's pawn
+				{
+					sum++;
+					i--;
+					j--;
+				}
+			}		
+			
+			value += sum;
+		}
+		
 		return value;
 	}
 
@@ -458,6 +563,11 @@ public class Board
      */
     public boolean isTerminal()
     {
+    	 //thelei tsekarisma
+        //Check if there is no available moves
+        if(noMoves(Board.W) && noMoves(Board.B)){
+        	return true;
+        }
         //Checking if there is at least one empty tile
         for(int row=0; row<8; row++)
 		{
@@ -468,12 +578,7 @@ public class Board
                     return false;
                 }
             }
-		}        
-        //thelei tsekarisma
-        //Check if there is no available moves
-        if(!noMoves(Board.W) || !noMoves(Board.B)){
-        	return false;
-        }
+		} 
         
         return true;
     }
