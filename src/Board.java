@@ -138,7 +138,7 @@ public class Board
 
 	public boolean isValidUp(int row, int col, int letter){
 		if(row > 1){																//if row <= 1 - sure not valid
-			if(gameBoard[row-1][col] != letter && gameBoard[row-1][col] != EMPTY && gameBoard[row-1][col] != available){	//if up there is an opponent's pawn
+			if(gameBoard[row-1][col] == lastLetterPlayed){	//if up there is an opponent's pawn
 				for(int i=row-1; i>0; i--){ 										//then search from that pawn to edge
 					if (gameBoard[i-1][col] == EMPTY || gameBoard[row-1][col] == available){								//if you find EMPTY - not valid
 						return false;
@@ -154,7 +154,7 @@ public class Board
 	
 	public boolean isValidUpRight(int row, int col, int letter){
 		if(row > 1 && col < 6){															//check if there is room up and right
-			if(gameBoard[row-1][col+1] != letter && gameBoard[row-1][col+1] != EMPTY && gameBoard[row-1][col+1] != available){	//if up there is an opponent's pawn
+			if(gameBoard[row-1][col+1] == lastLetterPlayed){	//if up there is an opponent's pawn
 				row--;
 				col++;
 				while(row>0 && col<7){
@@ -174,7 +174,7 @@ public class Board
 	
 	public boolean isValidRight(int row, int col, int letter){
 		if(col < 6){																//if col < 6 - sure not valid
-			if(gameBoard[row][col+1] != letter && gameBoard[row][col+1] != EMPTY && gameBoard[row][col+1] != available){	//if right there is an opponent's pawn
+			if(gameBoard[row][col+1] == lastLetterPlayed){	//if right there is an opponent's pawn
 				for(int i=col+1; i<7; i++){ 										//then search from that pawn to edge
 					if (gameBoard[row][i+1] == EMPTY || gameBoard[row][col+1] == available){								//if you find EMPTY - not valid
 						return false;
@@ -191,7 +191,7 @@ public class Board
 	
 	public boolean isValidRightDown(int row, int col, int letter){
 		if(row < 6 && col < 6){															//check if there is room right and down
-			if(gameBoard[row+1][col+1] != letter && gameBoard[row+1][col+1] != EMPTY && gameBoard[row+1][col+1] != available){	//if up there is an opponent's pawn
+			if(gameBoard[row+1][col+1] == lastLetterPlayed){	//if up there is an opponent's pawn
 				row++;
 				col++;
 				while(row<7 && col<7){
@@ -211,7 +211,7 @@ public class Board
 	
 	public boolean isValidDown(int row, int col, int letter){
 		if(row < 6){																//if row < 6 - sure not valid
-			if(gameBoard[row+1][col] != letter && gameBoard[row+1][col] != EMPTY && gameBoard[row+1][col] != available){	//if down there is an opponent's pawn
+			if(gameBoard[row+1][col] == lastLetterPlayed){	//if down there is an opponent's pawn
 				for(int i=row+1; i<7; i++){ 										//then search from that pawn to edge
 					if (gameBoard[i+1][col] == EMPTY || gameBoard[row+1][col] == available){							//if you find EMPTY - not valid
 						return false;
@@ -227,7 +227,7 @@ public class Board
 	
 	public boolean isValidDownLeft(int row, int col, int letter){
 		if(row < 6 && col > 1){															//check if there is room down and left
-			if(gameBoard[row+1][col-1] != letter && gameBoard[row+1][col-1] != EMPTY && gameBoard[row+1][col-1] != available){	//if up there is an opponent's pawn
+			if(gameBoard[row+1][col-1] == lastLetterPlayed){	//if up there is an opponent's pawn
 				row++;
 				col--;
 				while(row<7 && col>0){
@@ -247,7 +247,7 @@ public class Board
 	
 	public boolean isValidLeft(int row, int col, int letter){
 		if(col > 1){																//if col > 1 - sure not valid
-			if(gameBoard[row][col-1] != letter && gameBoard[row][col-1] != EMPTY && gameBoard[row][col-1] != available){	//if left there is an opponent's pawn
+			if(gameBoard[row][col-1] == lastLetterPlayed){	//if left there is an opponent's pawn
 				for(int i=col-1; i>0; i--){ 										//then search from that pawn to edge
 					if (gameBoard[row][i-1] == EMPTY || gameBoard[row][col-1] == available){							//if you find EMPTY - not valid
 						return false;
@@ -264,7 +264,7 @@ public class Board
 	
 	public boolean isValidLeftUp(int row, int col, int letter){
 		if(row > 1 && col > 1){															//check if there is room left and up
-			if(gameBoard[row-1][col-1] != letter && gameBoard[row-1][col-1] != EMPTY && gameBoard[row-1][col-1] != available){	//if up there is an opponent's pawn
+			if(gameBoard[row-1][col-1] == lastLetterPlayed){	//if up there is an opponent's pawn
 				row--;
 				col--;
 				while(row>0 && col>0){
@@ -312,94 +312,96 @@ public class Board
 		return true;
 	}
 
+	
+	public void flip(int row, int col, int letter){
+		if (isValidUp(row, col, letter)){
+			int i = row-1;
+			while(gameBoard[i][col] != letter) //while up there is an opponent's pawn
+			{
+				gameBoard[i][col] = letter; //Change opponent's pawn in player's
+				i--;
+			}			
+		}
+		
+		if (isValidUpRight(row, col, letter)){
+			int i = row-1;
+			int j = col+1;
+			while(gameBoard[i][j] != letter) //while up there is an opponent's pawn
+			{
+				gameBoard[i][j] = letter; //Change opponent's pawn in player's
+				i--;
+				j++;
+			}	
+		}
+		
+		if (isValidRight(row, col, letter)){
+			int i = col+1;
+			while(gameBoard[row][i] != letter) //while up there is an opponent's pawn
+			{
+				gameBoard[row][i] = letter; //Change opponent's pawn in player's
+				i++;
+			}	
+		}
+
+		if (isValidRightDown(row, col, letter)){
+			int i = row+1;
+			int j = col+1;
+			while(gameBoard[i][j] != letter) //while up there is an opponent's pawn
+			{
+				gameBoard[i][j] = letter; //Change opponent's pawn in player's
+				i++;
+				j++;
+			}
+		}
+
+		if (isValidDown(row, col, letter)){
+			int i = row+1;
+			while(gameBoard[i][col] != letter) //while up there is an opponent's pawn
+			{
+				gameBoard[i][col] = letter; //Change opponent's pawn in player's
+				i++;
+			}	
+		}
+
+		if (isValidDownLeft(row, col, letter)){
+			int i = row+1;
+			int j = col-1;
+			while(gameBoard[i][j] != letter) //while up there is an opponent's pawn
+			{
+				gameBoard[i][j] = letter; //Change opponent's pawn in player's
+				i++;
+				j--;
+			}
+		}
+
+		if (isValidLeft(row, col, letter)){
+			int i = col-1;
+			while(gameBoard[row][i] != letter) //while up there is an opponent's pawn
+			{
+				gameBoard[row][i] = letter; //Change opponent's pawn in player's
+				i--;
+			}	
+		}
+
+		if (isValidLeftUp(row, col, letter)){
+			int i = row-1;
+			int j = col-1;
+			while(gameBoard[i][j] != letter) //while up there is an opponent's pawn
+			{
+				gameBoard[i][j] = letter; //Change opponent's pawn in player's
+				i--;
+				j--;
+			}
+		}
+	}
+	
 	//Make a move; it places a letter in the board
 		public void makeMove(int row, int col, int letter)
 		{			
 			gameBoard[row][col] = letter;
 			lastMove = new Move(row, col);
 			lastLetterPlayed = letter;
-			
-			if (isValidUp(row, col, letter)){
-				int i = row-1;
-				while(gameBoard[i][col] != letter) //while up there is an opponent's pawn
-				{
-					gameBoard[i][col] = letter; //Change opponent's pawn in player's
-					i--;
-				}			
-			}
-			
-			if (isValidUpRight(row, col, letter)){
-				int i = row-1;
-				int j = col+1;
-				while(gameBoard[i][j] != letter) //while up there is an opponent's pawn
-				{
-					gameBoard[i][j] = letter; //Change opponent's pawn in player's
-					i--;
-					j++;
-				}	
-			}
-			
-			if (isValidRight(row, col, letter)){
-				int i = col+1;
-				while(gameBoard[row][i] != letter) //while up there is an opponent's pawn
-				{
-					gameBoard[row][i] = letter; //Change opponent's pawn in player's
-					i++;
-				}	
-			}
-
-			if (isValidRightDown(row, col, letter)){
-				int i = row+1;
-				int j = col+1;
-				while(gameBoard[i][j] != letter) //while up there is an opponent's pawn
-				{
-					gameBoard[i][j] = letter; //Change opponent's pawn in player's
-					i++;
-					j++;
-				}
-			}
-
-			if (isValidDown(row, col, letter)){
-				int i = row+1;
-				while(gameBoard[i][col] != letter) //while up there is an opponent's pawn
-				{
-					gameBoard[i][col] = letter; //Change opponent's pawn in player's
-					i++;
-				}	
-			}
-
-			if (isValidDownLeft(row, col, letter)){
-				int i = row+1;
-				int j = col-1;
-				while(gameBoard[i][j] != letter) //while up there is an opponent's pawn
-				{
-					gameBoard[i][j] = letter; //Change opponent's pawn in player's
-					i++;
-					j--;
-				}
-			}
-
-			if (isValidLeft(row, col, letter)){
-				int i = col-1;
-				while(gameBoard[row][i] != letter) //while up there is an opponent's pawn
-				{
-					gameBoard[row][i] = letter; //Change opponent's pawn in player's
-					i--;
-				}	
-			}
-
-			if (isValidLeftUp(row, col, letter)){
-				int i = row-1;
-				int j = col-1;
-				while(gameBoard[i][j] != letter) //while up there is an opponent's pawn
-				{
-					gameBoard[i][j] = letter; //Change opponent's pawn in player's
-					i--;
-					j--;
-				}
-			}
-			
-			
+			flip(row, col, letter);
 		}
 	
 		
