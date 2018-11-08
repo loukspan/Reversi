@@ -2,12 +2,11 @@ import java.util.ArrayList;
 import java.util.Scanner;
 
 public class Board
-{
-	
+{	
 	Scanner sc = new Scanner(System.in);
 	
     //Variables for the Boards values
-	//W=white, B=black, available = available moves as "."
+	//W=white, B=black, available = available moves
 	public static final int W = 1;
 	public static final int B = -1;
 	public static final int EMPTY = 0;
@@ -16,9 +15,7 @@ public class Board
     //Immediate move that lead to this board
     private Move lastMove;
 
-    /* Variable containing who played last; whose turn resulted in this board
-     * Even a new Board has lastLetterPlayed value; it denotes which player will play first
-     */
+    //Who played last
 	private int lastLetterPlayed;
 
 	private int [][] gameBoard;
@@ -38,7 +35,6 @@ public class Board
 			gameBoard[4][4] = W;
 			gameBoard[4][3] = B;
 			gameBoard[3][4] = B;
-			
 		}
 	}
 	
@@ -94,37 +90,42 @@ public class Board
 		}
 	}
 	
+	//Checks if the player has available moves
 	public boolean noMoves(int letter){
-		//The children-moves of the state are calculated
 		ArrayList<Board> children = new ArrayList<Board>(getChildren(letter));
 		if(children.isEmpty()){
-			//Thelei tsekarisma
 			return true;
 		}
 		return false;
 	}
 	
+	//Handle the user's turn
 	public void handleEntrance(){
+		placeAvailablePositions(Board.B);
+		print();
+		removeAvailablePositions(Board.B);
+		
+		//If there are no moves user can't play
 		if(noMoves(Board.B)){
 			System.out.println("Black has no moves");
 			lastLetterPlayed = Board.B;
 		}
 		else{
 			while(true){
-	        	System.out.println("Black moves");
-	        	System.out.println("Enter position (e.g. A-1)");
+	        	System.out.println("It's Black's move");
+	        	System.out.println("Enter your move (e.g. A1)");
 	        	String position = sc.next();
-	        	String[] parts = position.split("-");
+	        	String[] parts = position.split("");
 	        	int row = Integer.parseInt(parts[1])-1;	
 	        	int col = -1;
 	        	if(parts[0].equals("A")) {col = 0;}
-	        	else if(parts[0].equals("B")) {col = 1;}
-	        	else if(parts[0].equals("C")) {col = 2;}
-	        	else if(parts[0].equals("D")) {col = 3;}
-	        	else if(parts[0].equals("E")) {col = 4;}
-	        	else if(parts[0].equals("F")) {col = 5;}
-	        	else if(parts[0].equals("G")) {col = 6;}
-	        	else if(parts[0].equals("H")) {col = 7;}
+	        	else if(parts[0].equalsIgnoreCase("B")) {col = 1;}
+	        	else if(parts[0].equalsIgnoreCase("C")) {col = 2;}
+	        	else if(parts[0].equalsIgnoreCase("D")) {col = 3;}
+	        	else if(parts[0].equalsIgnoreCase("E")) {col = 4;}
+	        	else if(parts[0].equalsIgnoreCase("F")) {col = 5;}
+	        	else if(parts[0].equalsIgnoreCase("G")) {col = 6;}
+	        	else if(parts[0].equalsIgnoreCase("H")) {col = 7;}
 	        	if(isValidMove(row, col, Board.B)) {        		
 	            	makeMove(row, col, Board.B);
 	            	break;
@@ -135,10 +136,11 @@ public class Board
 	        }
 		}
 	}
-
+	
+	//These functions check if a move is valid and in which directions
 	public boolean isValidUp(int row, int col, int letter){
 		if(row > 1){																//if row <= 1 - sure not valid
-			if(gameBoard[row-1][col] == lastLetterPlayed){	//if up there is an opponent's pawn
+			if(gameBoard[row-1][col] != letter && gameBoard[row-1][col] != EMPTY){	//if up there is an opponent's pawn
 				for(int i=row-1; i>0; i--){ 										//then search from that pawn to edge
 					if (gameBoard[i-1][col] == EMPTY || gameBoard[row-1][col] == available){								//if you find EMPTY - not valid
 						return false;
@@ -154,7 +156,7 @@ public class Board
 	
 	public boolean isValidUpRight(int row, int col, int letter){
 		if(row > 1 && col < 6){															//check if there is room up and right
-			if(gameBoard[row-1][col+1] == lastLetterPlayed){	//if up there is an opponent's pawn
+			if(gameBoard[row-1][col+1] != letter && gameBoard[row-1][col+1] != EMPTY){	//if up there is an opponent's pawn
 				row--;
 				col++;
 				while(row>0 && col<7){
@@ -174,7 +176,7 @@ public class Board
 	
 	public boolean isValidRight(int row, int col, int letter){
 		if(col < 6){																//if col < 6 - sure not valid
-			if(gameBoard[row][col+1] == lastLetterPlayed){	//if right there is an opponent's pawn
+			if(gameBoard[row][col+1] != letter && gameBoard[row][col+1] != EMPTY){	//if right there is an opponent's pawn
 				for(int i=col+1; i<7; i++){ 										//then search from that pawn to edge
 					if (gameBoard[row][i+1] == EMPTY || gameBoard[row][col+1] == available){								//if you find EMPTY - not valid
 						return false;
@@ -191,7 +193,7 @@ public class Board
 	
 	public boolean isValidRightDown(int row, int col, int letter){
 		if(row < 6 && col < 6){															//check if there is room right and down
-			if(gameBoard[row+1][col+1] == lastLetterPlayed){	//if up there is an opponent's pawn
+			if(gameBoard[row+1][col+1] != letter && gameBoard[row+1][col+1] != EMPTY){	//if up there is an opponent's pawn
 				row++;
 				col++;
 				while(row<7 && col<7){
@@ -211,7 +213,7 @@ public class Board
 	
 	public boolean isValidDown(int row, int col, int letter){
 		if(row < 6){																//if row < 6 - sure not valid
-			if(gameBoard[row+1][col] == lastLetterPlayed){	//if down there is an opponent's pawn
+			if(gameBoard[row+1][col] != letter && gameBoard[row+1][col] != EMPTY){	//if down there is an opponent's pawn
 				for(int i=row+1; i<7; i++){ 										//then search from that pawn to edge
 					if (gameBoard[i+1][col] == EMPTY || gameBoard[row+1][col] == available){							//if you find EMPTY - not valid
 						return false;
@@ -227,7 +229,7 @@ public class Board
 	
 	public boolean isValidDownLeft(int row, int col, int letter){
 		if(row < 6 && col > 1){															//check if there is room down and left
-			if(gameBoard[row+1][col-1] == lastLetterPlayed){	//if up there is an opponent's pawn
+			if(gameBoard[row+1][col-1] != letter && gameBoard[row+1][col-1] != EMPTY){	//if up there is an opponent's pawn
 				row++;
 				col--;
 				while(row<7 && col>0){
@@ -247,7 +249,7 @@ public class Board
 	
 	public boolean isValidLeft(int row, int col, int letter){
 		if(col > 1){																//if col > 1 - sure not valid
-			if(gameBoard[row][col-1] == lastLetterPlayed){	//if left there is an opponent's pawn
+			if(gameBoard[row][col-1] != letter && gameBoard[row][col-1] != EMPTY){	//if left there is an opponent's pawn
 				for(int i=col-1; i>0; i--){ 										//then search from that pawn to edge
 					if (gameBoard[row][i-1] == EMPTY || gameBoard[row][col-1] == available){							//if you find EMPTY - not valid
 						return false;
@@ -264,7 +266,7 @@ public class Board
 	
 	public boolean isValidLeftUp(int row, int col, int letter){
 		if(row > 1 && col > 1){															//check if there is room left and up
-			if(gameBoard[row-1][col-1] == lastLetterPlayed){	//if up there is an opponent's pawn
+			if(gameBoard[row-1][col-1] != letter && gameBoard[row-1][col-1] != EMPTY){	//if up there is an opponent's pawn
 				row--;
 				col--;
 				while(row>0 && col>0){
@@ -283,6 +285,7 @@ public class Board
 	}
 
 
+	//Check if a move is valid in at least one direction
 	public boolean isValid(int row, int col, int letter)
 	{
 		if (isValidUp(row, col, letter) || isValidUpRight(row, col, letter) || isValidRight(row, col, letter) || isValidRightDown(row, col, letter) || isValidDown(row, col, letter) || isValidDownLeft(row, col, letter) || isValidLeft(row, col, letter) || isValidLeftUp(row, col, letter))
@@ -294,7 +297,7 @@ public class Board
 	}
 
 	
-    //Checks whether a move is valid; whether a square is empty
+    //Checks whether a move is valid
 	public boolean isValidMove(int row, int col, int letter)
 	{
 		if ((row == -1) || (col == -1) || (row > 7) || (col > 7))
@@ -312,7 +315,7 @@ public class Board
 		return true;
 	}
 
-	
+	//Flip the pawns 
 	public void flip(int row, int col, int letter){
 		if (isValidUp(row, col, letter)){
 			int i = row-1;
@@ -404,7 +407,7 @@ public class Board
 			flip(row, col, letter);
 		}
 	
-		
+	//Place the available moves in the board so the user can see
 	public void	placeAvailablePositions(int letter){
 		//The children-moves of the state are calculated
 		ArrayList<Board> children = new ArrayList<Board>(getChildren(letter));
@@ -413,6 +416,7 @@ public class Board
 		}
 	}
 	
+	//Remove the available moves from the board to continue with the next move
 	public void removeAvailablePositions(int letter){
 		//The children-moves of the state are calculated
 		ArrayList<Board> children = new ArrayList<Board>(getChildren(letter));
@@ -421,9 +425,7 @@ public class Board
 		}
 	}
 		
-    /* Generates the children of the state
-     * Any square in the board that is empty results to a child
-     */
+    //Generates the children of the state
 	public ArrayList<Board> getChildren(int letter)
 	{
 		ArrayList<Board> children = new ArrayList<Board>();
@@ -442,135 +444,214 @@ public class Board
 		return children;
 	}
 
-	/*
-     * The heuristic we use to evaluate is
-     * the number our almost complete tic-tac-toes (having 2 letter in a row, column or diagonal)
-     * minus the number of the opponent's almost complete tic-tac-toes
-     * Special case: if a complete tic-tac-toe is present it counts as ten
-     */
-	public int evaluate(int row, int col, int letter)
+    //The heuristic we use to evaluate every state
+	public int evaluate(int letter) {
+		int opp = B;
+		if (letter == B) {
+			opp = W;
+		}
+		return evaluateState(letter) - evaluateState(opp);
+	}
+	
+	public int evaluateState(int letter)
 	{
-		System.out.println("Gameboard row "+row+" col "+col+" letter "+letter);
-		int value=0;
-		//check if available move is at the inner box
-		if(row > 1 && row < 6 && col > 1 && col < 6){
-			System.out.println("+20");
-			value += 20;
+		int value = 0;
+		
+		int opp = B;
+		if (letter == B) {
+			opp = W;
 		}
-		//Check if available move is diagonal to corners
-		if(row == 1 && col == 1 || row == 1 && col == 6 || row == 6 && col == 1 || row == 6 && col == 6){
-			System.out.println("-80");
-			value -= 80;
+		
+		//If you find Winning state pick that
+		if (getWinner() == letter && Pawns(W) + Pawns(B) > 55) {
+			return 10000;
 		}
-		//Check if available move is next to corners
-		if(row==0 && col==1 || row==0 && col==6 || row==1 && col==0 || row==1 && col==7 || row==6 && col==0 || row==6 && col==7 || row==7 && col==1 || row==7 && col==6){
-			System.out.println("-60");
-			value -= 50;
+		
+		//Corners highly valued
+		if (gameBoard[0][0] == letter || (lastLetterPlayed != letter && isValid(0,0,letter))) {
+			value += 400;
 		}
-		//check if available move is at the edges
-		if(row == 0 || row == 7 || col == 0 || col == 7){
-			System.out.println("+40");
-			value += 50;
+		if (gameBoard[7][7] == letter || (lastLetterPlayed != letter && isValid(7,7,letter))) {
+			value += 400;
 		}
-		//check if available move is at the corners
-		if((row == 0 && col == 0) || (row == 0 && col == 7) || (row == 7 && col == 0) || (row == 7 && col == 7)){
-			System.out.println("+100");
-			value += 100;
+		if (gameBoard[0][7] == letter || (lastLetterPlayed != letter && isValid(0,7,letter))) {
+			value += 400;
 		}
-		//check how many opponent's pawns will turn
-		if(row == 0 || row == 7 || col == 0 || col == 7){
-			int sum = 0;
-			if (isValidUp(row, col, letter)){
-				int i = row-1;
-				while(gameBoard[i][col] != letter) //while up there is an opponent's pawn
-				{
-					sum++;
-					i--;
-				}			
+		if (gameBoard[7][0] == letter || (lastLetterPlayed != letter && isValid(7,0,letter))) {
+			value += 400;
+		}
+				
+		//Giving corners is bad
+		if (gameBoard[0][1] == letter && isValid(0, 0, opp)) {
+			value += 200;
+		}
+		if (gameBoard[1][0] == letter && isValid(0, 0, opp)) {
+			value += 200;
+		}
+		if (gameBoard[1][1] == letter && gameBoard[0][0] == EMPTY) {
+			value -= 200;
+		}
+		if (gameBoard[6][7] == letter && isValid(7, 7, opp)) {
+			value += 200;
+		}
+		if (gameBoard[7][6] == letter && isValid(7, 7, opp)) {
+			value += 200;
+		}
+		if (gameBoard[6][6] == letter && gameBoard[7][7] == EMPTY) {
+			value -= 200;
+		}
+		if (gameBoard[1][7] == letter && isValid(0, 7, opp)) {
+			value += 200;
+		}
+		if (gameBoard[0][6] == letter && isValid(0, 7, opp)) {
+			value += 200;
+		}
+		if (gameBoard[1][6] == letter && gameBoard[0][7] == EMPTY) {
+			value -= 200;
+		}
+		if (gameBoard[7][1] == letter && isValid(7, 0, opp)) {
+			value += 200;
+		}
+		if (gameBoard[6][0] == letter && isValid(7, 0, opp)) {
+			value += 200;
+		}
+		if (gameBoard[6][1] == letter && gameBoard[7][0] == EMPTY) {
+			value -= 200;
+		}
+		
+		//Edges are valued
+		for(int row = 0; row < 8; row++) {
+			if (gameBoard[row][0] == letter) {
+				value += 20;
 			}
-			if (isValidUpRight(row, col, letter)){
-				int i = row-1;
-				int j = col+1;
-				while(gameBoard[i][j] != letter) //while up there is an opponent's pawn
-				{
-					sum++;
-					i--;
-					j++;
-				}	
+			if (gameBoard[row][7] == letter) {
+				value += 20;
 			}
-			if (isValidRight(row, col, letter)){
-				int i = col+1;
-				while(gameBoard[row][i] != letter) //while up there is an opponent's pawn
-				{
-					sum++;
-					i++;
-				}	
+		}
+		for(int col = 0; col < 8; col++) {
+			if (gameBoard[0][col] == letter) {
+				value += 20;
 			}
-			if (isValidRightDown(row, col, letter)){
-				int i = row+1;
-				int j = col+1;
-				while(gameBoard[i][j] != letter) //while up there is an opponent's pawn
-				{
-					sum++;
-					i++;
-					j++;
-				}
+			if (gameBoard[7][col] == letter) {
+				value += 20;
 			}
-			if (isValidDown(row, col, letter)){
-				int i = row+1;
-				while(gameBoard[i][col] != letter) //while up there is an opponent's pawn
-				{
-					sum++;
-					i++;
-				}	
+		}
+		
+		if(Pawns(letter)>Pawns(opp)){
+			value += 10;
+		}
+		
+		
+		
+		//Having more pieces than opponent is values, especially late game
+		if(Pawns(W) + Pawns(B) > 50) {
+			value += 20*(Pawns(letter) - Pawns(opp));
+		}
+				
+		//Minimize their moves mid to late game
+		if (Pawns(W) + Pawns(B) > 30) {
+			ArrayList<Board> children = new ArrayList<Board>(getChildren(opp));
+			if(children.size() == 0) {
+				value += 200;
+			} else if (children.size() < 3) {
+				value += 100;
+			} else {
+				value -= children.size()*25;
 			}
-			if (isValidDownLeft(row, col, letter)){
-				int i = row+1;
-				int j = col-1;
-				while(gameBoard[i][j] != letter) //while up there is an opponent's pawn
-				{
-					sum++;
-					i++;
-					j--;
-				}
-			}
-			if (isValidLeft(row, col, letter)){
-				int i = col-1;
-				while(gameBoard[row][i] != letter) //while up there is an opponent's pawn
-				{
-					sum++;
-					i--;
-				}	
-			}
-			if (isValidLeftUp(row, col, letter)){
-				int i = row-1;
-				int j = col-1;
-				while(gameBoard[i][j] != letter) //while up there is an opponent's pawn
-				{
-					sum++;
-					i--;
-					j--;
-				}
-			}		
 			
-			value += sum;
+		}
+	
+		//Try to have one piece in each col/row midgame
+		if (Pawns(W) + Pawns(B) > 20 && Pawns(W) + Pawns(B) < 50) {
+			for(int row = 0; row < 8; row++) {
+				int sum = 0;
+				for(int col = 0; col < 8; col++) {
+					if (gameBoard[row][col] == letter) {
+						sum++;
+					}
+				}
+				if (sum > 0) {
+					value += 10;
+				}
+			}
+			for(int col = 0; col < 8; col++) {
+				int sum = 0;
+				for(int row = 0; row < 8; row++) {
+					if (gameBoard[row][col] == letter) {
+						sum++;
+					}
+				}
+				if (sum > 0) {
+					value += 10;
+				}
+			}			
+		}
+		
+		//Secured rows are valuable
+		for(int col = 0; col < 8; col+=7) {
+			for(int row = 0; row < 8; row++) {
+				if (gameBoard[0][col] == letter) {
+					if(gameBoard[row][col] != letter) {
+						break;
+					}
+					value += 20;
+				}
+			}
+			for(int row = 8 - 1; row >= 0; row--) {
+				if (gameBoard[7][col] == letter) {
+					if(gameBoard[row][col] != letter) {
+						break;
+					}
+					value += 20;
+				}
+			}
+		}
+				
+		//Secured cols are valuable
+		for(int row = 0; row < 8; row+=7) {
+			for(int col = 0; col < 8; col++) {
+				if (gameBoard[row][0] == letter) {
+					if(gameBoard[row][col] != letter) {
+						break;
+					}
+					value += 20;
+				}
+			}
+			for(int col = 8 - 1; col >= 0; col--) {
+				if (gameBoard[7][col] == letter) {
+					if(gameBoard[row][col] != letter) {
+						break;
+					}
+					value += 20;
+				}
+			}
 		}
 		
 		return value;
 	}
 
-    /*
-     * A state is terminal if there is a tic-tac-toe
-     * or no empty tiles are available
-     */
+	 //Count player's pawns
+    public int Pawns(int letter){
+    	int sum = 0; 
+    	for(int row=0; row<8; row++){
+         	for(int col=0; col<8; col++){
+         		if(gameBoard[row][col] == letter){
+                     sum++;
+                 }
+  			}
+        }
+    	return sum;
+    }
+	
+    //Checks if a state is is terminal
     public boolean isTerminal()
     {
-    	 //thelei tsekarisma
+    	// needs tseking
         //Check if there is no available moves
         if(noMoves(Board.W) && noMoves(Board.B)){
         	return true;
         }
-        //Checking if there is at least one empty tile
+        //Check if there is at least one empty tile
         for(int row=0; row<8; row++)
 		{
 			for(int col=0; col<8; col++)
@@ -586,27 +667,28 @@ public class Board
     }
 
     //Finds the winner
-    public String winner(){
-    	int sumW = 0;
-        int sumB = 0;
-        String winner = "White";
-        for(int row=0; row<8; row++){
-        	for(int col=0; col<8; col++){
-        		if(gameBoard[row][col] == W){
-                    sumW++;
-                }
-        		if(gameBoard[row][col] == B){
-                    sumB++;
-        		}
- 			}
+    public int getWinner(){
+        if(Pawns(B)>Pawns(W)){
+        	return B;
         }
-        if(sumB>sumW){
-        	winner = "Black";
+        //Return 0 if we have no winner
+        if(Pawns(B)==Pawns(W)){
+        	return 0;
         }
-        return "Total white = "+sumW+", total black = "+sumB+", the winner is "+winner;
+        return W;
     }
     
-    
+    //Print outcome
+    public String toStringWinner(){
+    	if(Pawns(B)==Pawns(W)){
+    		return "It's a tie with "+Pawns(W)+" pawns each";
+    	}
+    	if(getWinner()==B){
+    		return "White has "+Pawns(W)+" pawns, Black has "+Pawns(B)+" pawns, so the winner is Black";
+    	}
+    	return "White has "+Pawns(W)+" pawns, Black has "+Pawns(B)+" pawns, so the winner is White";
+    }
+        
     //Prints the board
 	public void print()
 	{
