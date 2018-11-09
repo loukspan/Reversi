@@ -118,7 +118,7 @@ public class Board
 	        	String[] parts = position.split("");
 	        	int row = Integer.parseInt(parts[1])-1;	
 	        	int col = -1;
-	        	if(parts[0].equals("A")) {col = 0;}
+	        	if(parts[0].equalsIgnoreCase("A")) {col = 0;}
 	        	else if(parts[0].equalsIgnoreCase("B")) {col = 1;}
 	        	else if(parts[0].equalsIgnoreCase("C")) {col = 2;}
 	        	else if(parts[0].equalsIgnoreCase("D")) {col = 3;}
@@ -450,17 +450,12 @@ public class Board
 		if (letter == B) {
 			opp = W;
 		}
-		return evaluateState(letter) - evaluateState(opp);
+		return evaluateState(letter, opp) - evaluateState(opp, letter);
 	}
 	
-	public int evaluateState(int letter)
+	public int evaluateState(int letter, int opp)
 	{
 		int value = 0;
-		
-		int opp = B;
-		if (letter == B) {
-			opp = W;
-		}
 		
 		//If you find Winning state pick that
 		if (getWinner() == letter && Pawns(W) + Pawns(B) > 55) {
