@@ -118,7 +118,7 @@ public class Board
 	        	String[] parts = position.split("");
 	        	int row = Integer.parseInt(parts[1])-1;	
 	        	int col = -1;
-	        	if(parts[0].equals("A")) {col = 0;}
+	        	if(parts[0].equalsIgnoreCase("A")) {col = 0;}
 	        	else if(parts[0].equalsIgnoreCase("B")) {col = 1;}
 	        	else if(parts[0].equalsIgnoreCase("C")) {col = 2;}
 	        	else if(parts[0].equalsIgnoreCase("D")) {col = 3;}
