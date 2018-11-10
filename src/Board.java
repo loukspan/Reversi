@@ -111,34 +111,29 @@ public class Board
 			lastLetterPlayed = Board.B;
 		}
 		else{
-			while(true){
-	        	try {
-					System.out.println("It's Black's move");
-					System.out.println("Enter your move (e.g. A1)");
-					String position = sc.next();
-					String[] parts = position.split("");
-					int row = Integer.parseInt(parts[1])-1;	
-					int col = -1;
-					if(parts[0].equalsIgnoreCase("A")) {col = 0;}
-					else if(parts[0].equalsIgnoreCase("B")) {col = 1;}
-					else if(parts[0].equalsIgnoreCase("C")) {col = 2;}
-					else if(parts[0].equalsIgnoreCase("D")) {col = 3;}
-					else if(parts[0].equalsIgnoreCase("E")) {col = 4;}
-					else if(parts[0].equalsIgnoreCase("F")) {col = 5;}
-					else if(parts[0].equalsIgnoreCase("G")) {col = 6;}
-					else if(parts[0].equalsIgnoreCase("H")) {col = 7;}
-					if(isValidMove(row, col, Board.B)) {        		
-						makeMove(row, col, Board.B);
-						break;
-					}
-					else{
-						System.out.println("Invalid Position, please try again");	
-					}
-				} catch (IndexOutOfBoundsException e) {
-					//e.printStackTrace();
-					System.out.println("Invalid Entrance, please try again");
+	      	try {
+	      		System.out.println("It's Black's move");
+				System.out.println("Enter your move (e.g. A1)");
+				String position = sc.next();
+				String[] parts = position.split("");
+				int row = Integer.parseInt(parts[1])-1;	
+				int col = -1;
+				if(parts[0].equalsIgnoreCase("A")) {col = 0;}
+				else if(parts[0].equalsIgnoreCase("B")) {col = 1;}
+				else if(parts[0].equalsIgnoreCase("C")) {col = 2;}
+				else if(parts[0].equalsIgnoreCase("D")) {col = 3;}
+				else if(parts[0].equalsIgnoreCase("E")) {col = 4;}
+				else if(parts[0].equalsIgnoreCase("F")) {col = 5;}
+				else if(parts[0].equalsIgnoreCase("G")) {col = 6;}
+				else if(parts[0].equalsIgnoreCase("H")) {col = 7;}
+				if(isValidMove(row, col, Board.B)) {        		
+					makeMove(row, col, Board.B);
 				}
-	        }
+			} catch (IndexOutOfBoundsException e) {
+				System.out.println("Invalid Entrance, please try again");
+			} catch (NumberFormatException ex) {
+				System.out.println("Invalid Entrance, please try again");
+			}
 		}
 	}
 	
