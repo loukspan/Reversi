@@ -449,25 +449,42 @@ public class Board
 		int opp = B;
 		if (letter == B) {
 			opp = W;
-		}
+		}/*
 		return evaluateState(letter) - evaluateState(opp);
 	}
 	
 	public int evaluateState(int letter)
-	{
+	{*/
+	
 		int value = 0;
 		
-		int opp = B;
-		if (letter == B) {
-			opp = W;
+		int[][] gradeBoard = new int[][]{
+			  { 400, -20, 10, 5, 5, 10, -20, 400 },
+			  { -20, -50, -2, -2, -2, -2, -50, -20 },
+			  { 10, -2, -1, -1, -1, -1, -2, 10 },
+			  { 5, -2, -1, -1, -1, -1, -2, 5 },
+			  { 5, -2, -1, -1, -1, -1, -2, 5 },
+			  { 10, -2, -1, -1, -1, -1, -2, 10 },
+			  { -20, -50, -2, -2, -2, -2, -50, -20 },
+			  { 400, -20, 10, 5, 5, 10, -20, 400 },
+			};
+		
+		for(int i=0; i<8; i++)
+		{
+			for(int j=0; j<8; j++)
+			{
+				if(gameBoard[i][j] == letter)
+			value += gradeBoard[i][j];
+			}
 		}
 		
-		//If you find Winning state pick that
+		
+		/*
 		if (getWinner() == letter && Pawns(W) + Pawns(B) > 55) {
 			return 10000;
 		}
 		
-		//Corners highly valued
+		//CORNER STABILITY
 		if (gameBoard[0][0] == letter || (lastLetterPlayed != letter && isValid(0,0,letter))) {
 			value += 400;
 		}
@@ -481,7 +498,7 @@ public class Board
 			value += 400;
 		}
 				
-		//Giving corners is bad
+		//Letting corners for the opponent is bad
 		if (gameBoard[0][1] == letter && isValid(0, 0, opp)) {
 			value += 200;
 		}
@@ -519,7 +536,7 @@ public class Board
 			value -= 200;
 		}
 		
-		//Edges are valued
+		//EDGE STABILITY
 		for(int row = 0; row < 8; row++) {
 			if (gameBoard[row][0] == letter) {
 				value += 20;
@@ -537,18 +554,14 @@ public class Board
 			}
 		}
 		
-		if(Pawns(letter)>Pawns(opp)){
-			value += 10;
-		}
-		
-		
+		//MOBILITY
 		
 		//Having more pieces than opponent is values, especially late game
 		if(Pawns(W) + Pawns(B) > 50) {
 			value += 20*(Pawns(letter) - Pawns(opp));
 		}
 				
-		//Minimize their moves mid to late game
+		//Minimize opponent's moves mid to late game
 		if (Pawns(W) + Pawns(B) > 30) {
 			ArrayList<Board> children = new ArrayList<Board>(getChildren(opp));
 			if(children.size() == 0) {
@@ -558,7 +571,6 @@ public class Board
 			} else {
 				value -= children.size()*25;
 			}
-			
 		}
 	
 		//Try to have one piece in each col/row midgame
@@ -626,7 +638,7 @@ public class Board
 				}
 			}
 		}
-		
+		*/
 		return value;
 	}
 
