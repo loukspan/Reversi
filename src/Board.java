@@ -449,15 +449,15 @@ public class Board
 		int opp = B;
 		if (letter == B) {
 			opp = W;
-		}/*
-		return evaluateState(letter) - evaluateState(opp);
+		}
+		return evaluateState(letter, opp) - evaluateState(opp, letter);
 	}
 	
-	public int evaluateState(int letter)
-	{*/
-	
+	public int evaluateState(int letter, int opp)
+	{
 		int value = 0;
 		
+		//STABILITY
 		int[][] gradeBoard = new int[][]{
 			  { 400, -20, 10, 5, 5, 10, -20, 400 },
 			  { -20, -50, -2, -2, -2, -2, -50, -20 },
@@ -477,8 +477,19 @@ public class Board
 			value += gradeBoard[i][j];
 			}
 		}
-		
-		
+		/*
+		//MOBILITY
+		//Minimize opponent's moves mid to late game
+		if (Pawns(W) + Pawns(B) > 30) {
+			ArrayList<Board> children = new ArrayList<Board>(getChildren(opp));
+			if(children.size() == 0) {
+				value += 5;
+			} else if (children.size() < 3) {
+				value += 2;
+			} else {
+				value -= 2;//children.size();
+			}
+		}
 		/*
 		if (getWinner() == letter && Pawns(W) + Pawns(B) > 55) {
 			return 10000;
@@ -561,17 +572,7 @@ public class Board
 			value += 20*(Pawns(letter) - Pawns(opp));
 		}
 				
-		//Minimize opponent's moves mid to late game
-		if (Pawns(W) + Pawns(B) > 30) {
-			ArrayList<Board> children = new ArrayList<Board>(getChildren(opp));
-			if(children.size() == 0) {
-				value += 200;
-			} else if (children.size() < 3) {
-				value += 100;
-			} else {
-				value -= children.size()*25;
-			}
-		}
+		
 	
 		//Try to have one piece in each col/row midgame
 		if (Pawns(W) + Pawns(B) > 20 && Pawns(W) + Pawns(B) < 50) {
