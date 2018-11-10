@@ -479,6 +479,12 @@ public class Board
 		}
 		
 		//MOBILITY
+		
+		//Having more pieces than opponent is values, especially late game
+		if(Pawns(W) + Pawns(B) > 30 && Pawns(letter) > Pawns(opp)) {
+			value += Pawns(letter) - Pawns(opp);
+		}
+				
 		//Minimize opponent's moves mid to late game
 		if (Pawns(W) + Pawns(B) > 30) {
 			ArrayList<Board> children = new ArrayList<Board>(getChildren(opp));
@@ -565,12 +571,7 @@ public class Board
 			}
 		}
 		
-		//MOBILITY
 		
-		//Having more pieces than opponent is values, especially late game
-		if(Pawns(W) + Pawns(B) > 50) {
-			value += 20*(Pawns(letter) - Pawns(opp));
-		}
 				
 		
 	

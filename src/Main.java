@@ -48,8 +48,8 @@ public class Main {
 				default:
 					break;
 			}
-			//board.print();
 		}
+		board.print();
 		//Print the winner
 		System.out.println(board.toStringWinner());
 		sc.close();
