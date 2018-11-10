@@ -477,7 +477,7 @@ public class Board
 			value += gradeBoard[i][j];
 			}
 		}
-		/*
+		
 		//MOBILITY
 		//Minimize opponent's moves mid to late game
 		if (Pawns(W) + Pawns(B) > 30) {
