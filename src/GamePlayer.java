@@ -54,7 +54,7 @@ public class GamePlayer
 		{
             //And for each child min is called, on a lower depth
 			Move move = min(child, depth + 1, alpha, beta);
-            
+          //  System.out.println("MAX CHILD value = "+move.getValue());
 			//The child-move with the greatest value is selected and returned by max
 			if(move.getValue() >= maxMove.getValue())
 			{
@@ -98,7 +98,7 @@ public class GamePlayer
 		for (Board child : children)
 		{
 			Move move = max(child, depth + 1, alpha, beta);
-			
+			//System.out.println("MIN CHILD value = "+move.getValue());
 			if(move.getValue() <= minMove.getValue())
 			{
 				beta = Math.min(beta, move.getValue());

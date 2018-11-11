@@ -450,23 +450,28 @@ public class Board
 		if (letter == B) {
 			opp = W;
 		}
-		return evaluateState(letter, opp) - evaluateState(opp, letter);
+		return evaluateState(letter) - evaluateState(opp);
 	}
 	
-	public int evaluateState(int letter, int opp)
+	public int evaluateState(int letter)
 	{
+		int opp = B;
+		if (letter == B) {
+			opp = W;
+		}
+		
 		int value = 0;
 		
 		//STABILITY
 		int[][] gradeBoard = new int[][]{
-			  { 1000, -200, 100, 50, 50, 100, -200, 1000 },
-			  { -200, -500, -20, -20, -20, -20, -500, -200 },
-			  { 100, -20, -10, -10, -10, -10, -20, 100 },
-			  { 50, -20, -10, -10, -10, -10, -20, 50 },
-			  { 50, -20, -10, -10, -10, -10, -20, 50 },
-			  { 100, -20, -10, -10, -10, -10, -20, 100 },
-			  { -200, -500, -20, -20, -20, -20, -500, -200 },
-			  { 1000, -200, 100, 50, 50, 100, -200, 1000 },
+			  { 10000, -2000, 1000, 500, 500, 1000, -2000, 10000 },
+			  { -2000, -5000, -200, -200, -200, -200, -5000, -2000 },
+			  { 1000, -200, -100, -100, -100, -100, -200, 1000 },
+			  { 500, -200, -100, -100, -100, -100, -200, 500 },
+			  { 500, -200, -100, -100, -100, -100, -200, 500 },
+			  { 1000, -200, -100, -100, -100, -100, -200, 1000 },
+			  { -2000, -5000, -200, -200, -200, -200, -5000, -2000 },
+			  { 10000, -2000, 1000, 500, 500, 1000, -2000, 10000 },
 			};
 		
 		for(int i=0; i<8; i++)
@@ -479,7 +484,7 @@ public class Board
 		}
 		
 		//MOBILITY
-		/*
+	
 		//Having more pieces than opponent is values, especially late game
 		if(Pawns(W) + Pawns(B) > 50 && Pawns(letter) > Pawns(opp)) {
 			value += 4;
@@ -489,14 +494,16 @@ public class Board
 		if (Pawns(W) + Pawns(B) > 30) {
 			ArrayList<Board> children = new ArrayList<Board>(getChildren(opp));
 			if(children.size() == 0) {
-				value += 4;
+				value += 5;
 			} else if (children.size() < 3) {
-				value += 2;
+				value += 3;
 			} else {
-				value -= 2;//children.size();
+				value -= children.size();
 			}
 		}
+		
 		/*
+	
 		if (getWinner() == letter && Pawns(W) + Pawns(B) > 55) {
 			return 10000;
 		}

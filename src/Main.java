@@ -32,6 +32,7 @@ public class Main {
                 //If W (PC) played last, then B (Player) plays now
 				case Board.W:
 					board.handleEntrance();
+					board.print();
 					break;
                 //If B (Player) played last, then W (PC) plays now
 				case Board.B:
@@ -49,7 +50,7 @@ public class Main {
 					break;
 			}
 		}
-		board.print();
+		
 		//Print the winner
 		System.out.println(board.toStringWinner());
 		sc.close();
