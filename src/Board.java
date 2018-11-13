@@ -445,46 +445,32 @@ public class Board
 	}
 
     //The heuristic we use to evaluate every state
-	public int evaluate(int letter) {
-		int opp = B;
-		if (letter == B) {
-			opp = W;
-		}
-		return evaluateState(letter) - evaluateState(opp);
-	}
-	
-	public int evaluateState(int letter)
-	{
-		int opp = B;
-		if (letter == B) {
-			opp = W;
-		}
+	public int evaluate() {
 		
 		int value = 0;
 		
 		//STABILITY
 		int[][] gradeBoard = new int[][]{
-			  { 10000, -2000, 1000, 500, 500, 1000, -2000, 10000 },
+			  { 10000, -2000, 1000,  500,  500, 1000, -2000, 10000 },
 			  { -2000, -5000, -200, -200, -200, -200, -5000, -2000 },
-			  { 1000, -200, -100, -100, -100, -100, -200, 1000 },
-			  { 500, -200, -100, -100, -100, -100, -200, 500 },
-			  { 500, -200, -100, -100, -100, -100, -200, 500 },
-			  { 1000, -200, -100, -100, -100, -100, -200, 1000 },
+			  { 1000,   -200, -100, -100, -100, -100,  -200,  1000 },
+			  { 500,    -200, -100, -100, -100, -100,  -200,   500 },
+			  { 500,    -200, -100, -100, -100, -100,  -200,   500 },
+			  { 1000,   -200, -100, -100, -100, -100,  -200,  1000 },
 			  { -2000, -5000, -200, -200, -200, -200, -5000, -2000 },
-			  { 10000, -2000, 1000, 500, 500, 1000, -2000, 10000 },
+			  { 10000, -2000, 1000,  500,  500, 1000, -2000, 10000 },
 			};
 		
 		for(int i=0; i<8; i++)
 		{
 			for(int j=0; j<8; j++)
 			{
-				if(gameBoard[i][j] == letter)
-			value += gradeBoard[i][j];
+				value += gameBoard[i][j] * gradeBoard[i][j];
 			}
 		}
 		
 		//MOBILITY
-	
+	/*
 		//Having more pieces than opponent is values, especially late game
 		if(Pawns(W) + Pawns(B) > 50 && Pawns(letter) > Pawns(opp)) {
 			value += 4;

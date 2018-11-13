@@ -44,7 +44,7 @@ public class GamePlayer
          */
 		if((board.isTerminal()) || (depth == maxDepth))
 		{
-			Move lastMove = new Move(board.getLastMove().getRow(), board.getLastMove().getCol(), board.evaluate(Board.W));
+			Move lastMove = new Move(board.getLastMove().getRow(), board.getLastMove().getCol(), board.evaluate());
 			return lastMove;
 		}
         //The children-moves of the state are calculated
@@ -90,7 +90,7 @@ public class GamePlayer
         Random r = new Random();
 		if((board.isTerminal()) || (depth == maxDepth))
 		{
-			Move lastMove = new Move(board.getLastMove().getRow(), board.getLastMove().getCol(), board.evaluate(Board.B));
+			Move lastMove = new Move(board.getLastMove().getRow(), board.getLastMove().getCol(), board.evaluate());
 			return lastMove;
 		}
 		ArrayList<Board> children = new ArrayList<Board>(board.getChildren(Board.B));
