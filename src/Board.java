@@ -101,6 +101,7 @@ public class Board
 	
 	//Handle the user's turn
 	public void handleEntrance(){
+		System.out.println("Dots ('.') are your available moves!");
 		placeAvailablePositions(Board.B);
 		print();
 		removeAvailablePositions(Board.B);
@@ -472,12 +473,12 @@ public class Board
 		//MOBILITY
 			
 		//Having more pieces than opponent is values, especially late game
-		if(Pawns(W) + Pawns(B) > 50 && Pawns(W) > Pawns(B)) {
-			value += 4;
+		if(Pawns(W) + Pawns(B) > 60 && getWinner() == W) {
+			value += 1000;
 		}
 			
 		//Minimize opponent's moves mid to late game
-		if (Pawns(W) + Pawns(B) > 30) {
+		if (Pawns(W) + Pawns(B) < 40) {
 			ArrayList<Board> children = new ArrayList<Board>(getChildren(B));
 			if(children.size() == 0) {
 				value += 5;

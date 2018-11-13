@@ -22,9 +22,7 @@ public class Main {
         if(firstPlayer.equalsIgnoreCase("YES")){
         	board.setLastLetterPlayed(Board.W);
         }
-        
-		
-				
+        				
         //While the game has not finished
 		while(!board.isTerminal())
 		{
@@ -34,7 +32,7 @@ public class Main {
                 //If W (PC) played last, then B (Player) plays now
 				case Board.W:
 					board.handleEntrance();
-					board.print();
+					
 					break;
                 //If B (Player) played last, then W (PC) plays now
 				case Board.B:
@@ -53,8 +51,8 @@ public class Main {
 				default:
 					break;
 			}
+			board.print();
 		}
-		board.print();
 		//Print the winner
 		System.out.println(board.toStringWinner());
 		sc.close();
