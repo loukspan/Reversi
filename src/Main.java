@@ -14,6 +14,8 @@ public class Main {
 		GamePlayer WPlayer = new GamePlayer(maxDepth, Board.W); //PC
 		Board board = new Board();
 
+		board.print();
+		
 		//Ask who will play first		
 		System.out.println("Do you want to play first? ");
         String firstPlayer = sc.next();
@@ -21,7 +23,7 @@ public class Main {
         	board.setLastLetterPlayed(Board.W);
         }
         
-		board.print();
+		
 				
         //While the game has not finished
 		while(!board.isTerminal())
@@ -43,14 +45,16 @@ public class Main {
 						board.setLastLetterPlayed(Board.W);
 					}
 					else{
-						board.makeMove(WMove.getRow(), WMove.getCol(), Board.W);
+						if(board.isValidMove(WMove.getRow(), WMove.getCol(), Board.W)) {        		
+							board.makeMove(WMove.getRow(), WMove.getCol(), Board.W);
+						}
 					}
 					break;
 				default:
 					break;
 			}
 		}
-		
+		board.print();
 		//Print the winner
 		System.out.println(board.toStringWinner());
 		sc.close();
