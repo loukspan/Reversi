@@ -20,6 +20,17 @@ public class Board
 
 	private int [][] gameBoard;
 	
+	private int[][] gradeBoard = new int[][]{
+			{ 10000, -2000, 1000,  500,  500, 1000, -2000, 10000 },
+			{ -2000, -5000, -200, -200, -200, -200, -5000, -2000 },
+			{ 1000,   -200, -100, -100, -100, -100,  -200,  1000 },
+			{ 500,    -200, -100, -100, -100, -100,  -200,   500 },
+			{ 500,    -200, -100, -100, -100, -100,  -200,   500 },
+			{ 1000,   -200, -100, -100, -100, -100,  -200,  1000 },
+			{ -2000, -5000, -200, -200, -200, -200, -5000, -2000 },
+			{ 10000, -2000, 1000,  500,  500, 1000, -2000, 10000 },
+		};
+	
 	public Board()
 	{
 		lastMove = new Move();
@@ -101,6 +112,7 @@ public class Board
 	
 	//Handle the user's turn
 	public void handleEntrance(){
+		System.out.println("It's Black's move");
 		System.out.println("Dots ('.') are your available moves!");
 		placeAvailablePositions(Board.B);
 		print();
@@ -112,8 +124,7 @@ public class Board
 			lastLetterPlayed = Board.B;
 		}
 		else{
-	      	try {
-	      		System.out.println("It's Black's move");
+	      	try {	      		
 				System.out.println("Enter your move (e.g. A1)");
 				String position = sc.next();
 				String[] parts = position.split("");
@@ -450,18 +461,7 @@ public class Board
 		
 		int value = 0;
 		
-		//STABILITY
-		int[][] gradeBoard = new int[][]{
-			  { 10000, -2000, 1000,  500,  500, 1000, -2000, 10000 },
-			  { -2000, -5000, -200, -200, -200, -200, -5000, -2000 },
-			  { 1000,   -200, -100, -100, -100, -100,  -200,  1000 },
-			  { 500,    -200, -100, -100, -100, -100,  -200,   500 },
-			  { 500,    -200, -100, -100, -100, -100,  -200,   500 },
-			  { 1000,   -200, -100, -100, -100, -100,  -200,  1000 },
-			  { -2000, -5000, -200, -200, -200, -200, -5000, -2000 },
-			  { 10000, -2000, 1000,  500,  500, 1000, -2000, 10000 },
-			};
-		
+		//STABILITY		
 		for(int i=0; i<8; i++)
 		{
 			for(int j=0; j<8; j++)
@@ -469,9 +469,8 @@ public class Board
 				value += gameBoard[i][j] * gradeBoard[i][j];
 			}
 		}
-		
 		//MOBILITY
-			
+		/*	
 		//Having more pieces than opponent is values, especially late game
 		if(Pawns(W) + Pawns(B) > 60 && getWinner() == W) {
 			value += 1000;
