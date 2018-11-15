@@ -1,8 +1,7 @@
 import java.util.ArrayList;
 import java.util.Scanner;
 
-public class Board
-{	
+public class Board{	
 	Scanner sc = new Scanner(System.in);
 	
     //Variables for the Boards values
@@ -18,28 +17,27 @@ public class Board
     //Who played last
 	private int lastLetterPlayed;
 
+	//board array
 	private int [][] gameBoard;
 	
+	//grade board array
 	private int[][] gradeBoard = new int[][]{
 			{ 10000, -2000, 1000,  500,  500, 1000, -2000, 10000 },
 			{ -2000, -5000, -200, -200, -200, -200, -5000, -2000 },
-			{ 1000,   -200, -100, -100, -100, -100,  -200,  1000 },
+			{ 1000,   -200,  -50, -100, -100,  -50,  -200,  1000 },
 			{ 500,    -200, -100, -100, -100, -100,  -200,   500 },
 			{ 500,    -200, -100, -100, -100, -100,  -200,   500 },
-			{ 1000,   -200, -100, -100, -100, -100,  -200,  1000 },
+			{ 1000,   -200,  -50, -100, -100,  -50,  -200,  1000 },
 			{ -2000, -5000, -200, -200, -200, -200, -5000, -2000 },
 			{ 10000, -2000, 1000,  500,  500, 1000, -2000, 10000 },
 		};
 	
-	public Board()
-	{
+	public Board(){
 		lastMove = new Move();
 		lastLetterPlayed = B;
 		gameBoard = new int[8][8];
-		for(int i=0; i<8; i++)
-		{
-			for(int j=0; j<8; j++)
-			{
+		for(int i=0; i<8; i++){
+			for(int j=0; j<8; j++){
 				gameBoard[i][j] = EMPTY;
 			}
 			gameBoard[3][3] = W;
@@ -49,53 +47,42 @@ public class Board
 		}
 	}
 	
-	public Board(Board board)
-	{
+	public Board(Board board){
 		lastMove = board.lastMove;
 		lastLetterPlayed = board.lastLetterPlayed;
 		gameBoard = new int[8][8];
-		for(int i=0; i<8; i++)
-		{
-			for(int j=0; j<8; j++)
-			{
+		for(int i=0; i<8; i++){
+			for(int j=0; j<8; j++){
 				gameBoard[i][j] = board.gameBoard[i][j];
 			}
 		}
 	}
 		
-	public Move getLastMove()
-	{
+	public Move getLastMove(){
 		return lastMove;
 	}
 	
-	public int getLastLetterPlayed()
-	{
+	public int getLastLetterPlayed(){
 		return lastLetterPlayed;
 	}
 	
-	public int[][] getGameBoard()
-	{
+	public int[][] getGameBoard(){
 		return gameBoard;
 	}
 
-	public void setLastMove(Move lastMove)
-	{
+	public void setLastMove(Move lastMove){
 		this.lastMove.setRow(lastMove.getRow());
 		this.lastMove.setCol(lastMove.getCol());
 		this.lastMove.setValue(lastMove.getValue());
 	}
 	
-	public void setLastLetterPlayed(int lastLetterPlayed)
-	{
+	public void setLastLetterPlayed(int lastLetterPlayed){
 		this.lastLetterPlayed = lastLetterPlayed;
 	}
 	
-	public void setGameBoard(int[][] gameBoard)
-	{
-		for(int i=0; i<8; i++)
-		{
-			for(int j=0; j<8; j++)
-			{
+	public void setGameBoard(int[][] gameBoard){
+		for(int i=0; i<8; i++){
+			for(int j=0; j<8; j++){
 				this.gameBoard[i][j] = gameBoard[i][j];
 			}
 		}
@@ -110,7 +97,7 @@ public class Board
 		return false;
 	}
 	
-	//Handle the user's turn
+	//Handle the user's entrance
 	public void handleEntrance(){
 		try {	      		
 			System.out.println("Enter your move (e.g. A1)");
@@ -144,7 +131,7 @@ public class Board
 		if(row > 1){																//if row <= 1 - sure not valid
 			if(gameBoard[row-1][col] != letter && gameBoard[row-1][col] != EMPTY){	//if up there is an opponent's pawn
 				for(int i=row-1; i>0; i--){ 										//then search from that pawn to edge
-					if (gameBoard[i-1][col] == EMPTY || gameBoard[row-1][col] == available){								//if you find EMPTY - not valid
+					if (gameBoard[i-1][col] == EMPTY || gameBoard[row-1][col] == available){	//if you find EMPTY - not valid
 						return false;
 					}
 					if (gameBoard[i-1][col] == letter){ 							//if there is a player's pawn
@@ -162,7 +149,7 @@ public class Board
 				row--;
 				col++;
 				while(row>0 && col<7){
-					if (gameBoard[row-1][col+1] == EMPTY || gameBoard[row-1][col+1] == available){								//if you find EMPTY - not valid
+					if (gameBoard[row-1][col+1] == EMPTY || gameBoard[row-1][col+1] == available){	//if you find EMPTY - not valid
 						return false;
 					}
 					if (gameBoard[row-1][col+1] == letter){ 							//if there is a player's pawn
@@ -180,7 +167,7 @@ public class Board
 		if(col < 6){																//if col < 6 - sure not valid
 			if(gameBoard[row][col+1] != letter && gameBoard[row][col+1] != EMPTY){	//if right there is an opponent's pawn
 				for(int i=col+1; i<7; i++){ 										//then search from that pawn to edge
-					if (gameBoard[row][i+1] == EMPTY || gameBoard[row][col+1] == available){								//if you find EMPTY - not valid
+					if (gameBoard[row][i+1] == EMPTY || gameBoard[row][col+1] == available){	//if you find EMPTY - not valid
 						return false;
 					}
 					if (gameBoard[row][i+1] == letter){ 							//if there is a player's pawn
@@ -199,7 +186,7 @@ public class Board
 				row++;
 				col++;
 				while(row<7 && col<7){
-					if (gameBoard[row+1][col+1] == EMPTY || gameBoard[row+1][col+1] == available){								//if you find EMPTY - not valid
+					if (gameBoard[row+1][col+1] == EMPTY || gameBoard[row+1][col+1] == available){	//if you find EMPTY - not valid
 						return false;
 					}
 					if (gameBoard[row+1][col+1] == letter){ 							//if there is a player's pawn
@@ -217,7 +204,7 @@ public class Board
 		if(row < 6){																//if row < 6 - sure not valid
 			if(gameBoard[row+1][col] != letter && gameBoard[row+1][col] != EMPTY){	//if down there is an opponent's pawn
 				for(int i=row+1; i<7; i++){ 										//then search from that pawn to edge
-					if (gameBoard[i+1][col] == EMPTY || gameBoard[row+1][col] == available){							//if you find EMPTY - not valid
+					if (gameBoard[i+1][col] == EMPTY || gameBoard[row+1][col] == available){	//if you find EMPTY - not valid
 						return false;
 					}
 					if (gameBoard[i+1][col] == letter){ 							//if there is a player's pawn
@@ -235,7 +222,7 @@ public class Board
 				row++;
 				col--;
 				while(row<7 && col>0){
-					if (gameBoard[row+1][col-1] == EMPTY || gameBoard[row+1][col-1] == available){								//if you find EMPTY - not valid
+					if (gameBoard[row+1][col-1] == EMPTY || gameBoard[row+1][col-1] == available){	//if you find EMPTY - not valid
 						return false;
 					}
 					if (gameBoard[row+1][col-1] == letter){ 							//if there is a player's pawn
@@ -253,7 +240,7 @@ public class Board
 		if(col > 1){																//if col > 1 - sure not valid
 			if(gameBoard[row][col-1] != letter && gameBoard[row][col-1] != EMPTY){	//if left there is an opponent's pawn
 				for(int i=col-1; i>0; i--){ 										//then search from that pawn to edge
-					if (gameBoard[row][i-1] == EMPTY || gameBoard[row][col-1] == available){							//if you find EMPTY - not valid
+					if (gameBoard[row][i-1] == EMPTY || gameBoard[row][col-1] == available){	//if you find EMPTY - not valid
 						return false;
 					}
 					if (gameBoard[row][i-1] == letter){ 							//if there is a player's pawn
@@ -272,7 +259,7 @@ public class Board
 				row--;
 				col--;
 				while(row>0 && col>0){
-					if (gameBoard[row-1][col-1] == EMPTY || gameBoard[row-1][col-1] == available){								//if you find EMPTY - not valid
+					if (gameBoard[row-1][col-1] == EMPTY || gameBoard[row-1][col-1] == available){	//if you find EMPTY - not valid
 						return false;
 					}
 					if (gameBoard[row-1][col-1] == letter){ 							//if there is a player's pawn
@@ -285,33 +272,19 @@ public class Board
 		}
 		return false;
 	}
-
-
-	//Check if a move is valid in at least one direction
-	public boolean isValid(int row, int col, int letter)
-	{
-		if (isValidUp(row, col, letter) || isValidUpRight(row, col, letter) || isValidRight(row, col, letter) || isValidRightDown(row, col, letter) || isValidDown(row, col, letter) || isValidDownLeft(row, col, letter) || isValidLeft(row, col, letter) || isValidLeftUp(row, col, letter))
-		{
-			return true;
-		}
-		
-		return false;
-	}
-
 	
     //Checks whether a move is valid
-	public boolean isValidMove(int row, int col, int letter)
-	{
-		if ((row == -1) || (col == -1) || (row > 7) || (col > 7))
-		{
+	public boolean isValidMove(int row, int col, int letter){
+		//if out of bounds
+		if ((row == -1) || (col == -1) || (row > 7) || (col > 7)){
 			return false;
 		}
-		if (gameBoard[row][col] != EMPTY && gameBoard[row][col] != available)
-		{
+		//if there is already a pawn
+		if (gameBoard[row][col] != EMPTY && gameBoard[row][col] != available){
 			return false;
 		}
-		if (!isValidUp(row, col, letter) && !isValidUpRight(row, col, letter) && !isValidRight(row, col, letter) && !isValidRightDown(row, col, letter) && !isValidDown(row, col, letter) && !isValidDownLeft(row, col, letter) && !isValidLeft(row, col, letter) && !isValidLeftUp(row, col, letter))
-		{
+		//if there is at least one of opponent's pawns to flip
+		if (!isValidUp(row, col, letter) && !isValidUpRight(row, col, letter) && !isValidRight(row, col, letter) && !isValidRightDown(row, col, letter) && !isValidDown(row, col, letter) && !isValidDownLeft(row, col, letter) && !isValidLeft(row, col, letter) && !isValidLeftUp(row, col, letter)){
 			return false;
 		}
 		return true;
@@ -400,14 +373,13 @@ public class Board
 		}
 	}
 	
-	//Make a move; it places a letter in the board
-		public void makeMove(int row, int col, int letter)
-		{			
-			gameBoard[row][col] = letter;
-			lastMove = new Move(row, col);
-			lastLetterPlayed = letter;
-			flip(row, col, letter);
-		}
+	//Make a move, it places a letter in the board
+	public void makeMove(int row, int col, int letter){			
+		gameBoard[row][col] = letter;
+		lastMove = new Move(row, col);
+		lastLetterPlayed = letter;
+		flip(row, col, letter);
+	}
 	
 	//Place the available moves in the board so the user can see
 	public void	placeAvailablePositions(int letter){
@@ -428,15 +400,11 @@ public class Board
 	}
 		
     //Generates the children of the state
-	public ArrayList<Board> getChildren(int letter)
-	{
+	public ArrayList<Board> getChildren(int letter){
 		ArrayList<Board> children = new ArrayList<Board>();
-		for(int row=0; row<8; row++)
-		{
-			for(int col=0; col<8; col++)
-			{
-				if(isValidMove(row, col, letter))
-				{
+		for(int row=0; row<8; row++){
+			for(int col=0; col<8; col++){
+				if(isValidMove(row, col, letter)){
 					Board child = new Board(this);
 					child.makeMove(row, col, letter);
 					children.add(child);
@@ -451,11 +419,9 @@ public class Board
 		
 		int value = 0;
 		
-		//STABILITY		
-		for(int i=0; i<8; i++)
-		{
-			for(int j=0; j<8; j++)
-			{
+		//POSITIONAL		
+		for(int i=0; i<8; i++){
+			for(int j=0; j<8; j++){
 				value += gameBoard[i][j] * gradeBoard[i][j];
 			}
 		}
@@ -481,15 +447,16 @@ public class Board
 		}
 		
 		if(WMobility.size() + BMobility.size()!=0){
-			//System.out.println("mob");
 			value += 10*(WCornerMobility.size() - BCornerMobility.size()) + ((WMobility.size() - BMobility.size())/(WMobility.size() + BMobility.size())) ;
 		}
 		
+		//GREED
 		//Having more pieces than opponent is values, especially late game
 		if(Pawns(W) + Pawns(B) > 60 && getWinner() == W) {
 			value += 1000;
 		}
 		
+		//STABILITY
 		//Try to have one piece in each col/row midgame
 		if (Pawns(W) + Pawns(B) > 20 && Pawns(W) + Pawns(B) < 50) {
 			for(int row = 0; row < 8; row++) {
@@ -573,25 +540,19 @@ public class Board
     }
 	
     //Checks if a state is is terminal
-    public boolean isTerminal()
-    {
-    	// needs tseking
+    public boolean isTerminal(){
         //Check if there is no available moves
         if(noMoves(Board.W) && noMoves(Board.B)){
         	return true;
         }
         //Check if there is at least one empty tile
-        for(int row=0; row<8; row++)
-		{
-			for(int col=0; col<8; col++)
-			{
-				if(gameBoard[row][col] == EMPTY || gameBoard[row][col] == available)
-				{
+        for(int row=0; row<8; row++){
+			for(int col=0; col<8; col++){
+				if(gameBoard[row][col] == EMPTY || gameBoard[row][col] == available){
                     return false;
                 }
             }
-		} 
-        
+		}   
         return true;
     }
 
@@ -619,17 +580,13 @@ public class Board
     }
         
     //Prints the board
-	public void print()
-	{
-		System.out.println("* A B C D E F G H *");
-		for(int row=0; row<8; row++)
-		{
+	public void print(){
+		System.out.println("  A B C D E F G H  ");
+		for(int row=0; row<8; row++){
 			int index = row+1;
 			System.out.print("" + index + " ");
-			for(int col=0; col<8; col++)
-			{
-				switch (gameBoard[row][col])
-				{
+			for(int col=0; col<8; col++){
+				switch (gameBoard[row][col]){
 					case W:
 						System.out.print("W ");
 						break;
@@ -646,9 +603,11 @@ public class Board
 						break;
 				}
 			}
-			System.out.println("*");
+			System.out.print("" + index + " ");
+			System.out.println("");
 		}
-		System.out.println("*******************");
+		System.out.println("  A B C D E F G H  ");
+		System.out.println("");
 	}
 	
 }

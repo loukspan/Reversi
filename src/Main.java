@@ -9,10 +9,9 @@ public class Main {
 		int maxDepth = 2;
 		System.out.println("Enter MaxDepth for the MiniMax algorithm: ");
         maxDepth = sc.nextInt();        
-        //We create the players and the board
-		//X=white, O=black
+        //We create the player PC and the board
 		GamePlayer WPlayer = new GamePlayer(maxDepth, Board.W); //PC
-		Board board = new Board();
+		Board board = new Board(); //Board
 
 		board.print();
 		
@@ -24,11 +23,9 @@ public class Main {
         }
         				
         //While the game has not finished
-		while(!board.isTerminal())
-		{
+		while(!board.isTerminal()){
 			System.out.println();
-			switch (board.getLastLetterPlayed())
-			{
+			switch (board.getLastLetterPlayed()){
                 //If W (PC) played last, then B (Player) plays now
 				case Board.W:
 					System.out.println("It's Black's move");
