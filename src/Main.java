@@ -31,27 +31,41 @@ public class Main {
 			{
                 //If W (PC) played last, then B (Player) plays now
 				case Board.W:
-					board.handleEntrance();
+					System.out.println("It's Black's move");
+					System.out.println("Dots ('.') are your available moves!");
+					board.placeAvailablePositions(Board.B);
+					board.print();
+					board.removeAvailablePositions(Board.B);
+					
+					//If there are no moves user can't play
+					if(board.noMoves(Board.B)){
+						System.out.println("Black has no moves");
+						board.setLastLetterPlayed(Board.B);
+					}
+					else{
+						board.handleEntrance();
+						board.print();
+					}
 					
 					break;
                 //If B (Player) played last, then W (PC) plays now
 				case Board.B:
 					System.out.println("It's White's move");
-					Move WMove = WPlayer.MiniMax(board);
                    	if(board.noMoves(Board.W)){
 						System.out.println("White has no moves");
 						board.setLastLetterPlayed(Board.W);
 					}
 					else{
+						Move WMove = WPlayer.MiniMax(board);
 						if(board.isValidMove(WMove.getRow(), WMove.getCol(), Board.W)) {        		
 							board.makeMove(WMove.getRow(), WMove.getCol(), Board.W);
+							board.print();
 						}
 					}
 					break;
 				default:
 					break;
 			}
-			board.print();
 		}
 		//Print the winner
 		System.out.println(board.toStringWinner());

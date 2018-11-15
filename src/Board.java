@@ -112,40 +112,30 @@ public class Board
 	
 	//Handle the user's turn
 	public void handleEntrance(){
-		System.out.println("It's Black's move");
-		System.out.println("Dots ('.') are your available moves!");
-		placeAvailablePositions(Board.B);
-		print();
-		removeAvailablePositions(Board.B);
-		
-		//If there are no moves user can't play
-		if(noMoves(Board.B)){
-			System.out.println("Black has no moves");
-			lastLetterPlayed = Board.B;
-		}
-		else{
-	      	try {	      		
-				System.out.println("Enter your move (e.g. A1)");
-				String position = sc.next();
-				String[] parts = position.split("");
-				int row = Integer.parseInt(parts[1])-1;	
-				int col = -1;
-				if(parts[0].equalsIgnoreCase("A")) {col = 0;}
-				else if(parts[0].equalsIgnoreCase("B")) {col = 1;}
-				else if(parts[0].equalsIgnoreCase("C")) {col = 2;}
-				else if(parts[0].equalsIgnoreCase("D")) {col = 3;}
-				else if(parts[0].equalsIgnoreCase("E")) {col = 4;}
-				else if(parts[0].equalsIgnoreCase("F")) {col = 5;}
-				else if(parts[0].equalsIgnoreCase("G")) {col = 6;}
-				else if(parts[0].equalsIgnoreCase("H")) {col = 7;}
-				if(isValidMove(row, col, Board.B)) {        		
-					makeMove(row, col, Board.B);
-				}
-			} catch (IndexOutOfBoundsException e) {
-				System.out.println("Invalid Entrance, please try again");
-			} catch (NumberFormatException ex) {
+		try {	      		
+			System.out.println("Enter your move (e.g. A1)");
+			String position = sc.next();
+			String[] parts = position.split("");
+			int row = Integer.parseInt(parts[1])-1;	
+			int col = -1;
+			if(parts[0].equalsIgnoreCase("A")) {col = 0;}
+			else if(parts[0].equalsIgnoreCase("B")) {col = 1;}
+			else if(parts[0].equalsIgnoreCase("C")) {col = 2;}
+			else if(parts[0].equalsIgnoreCase("D")) {col = 3;}
+			else if(parts[0].equalsIgnoreCase("E")) {col = 4;}
+			else if(parts[0].equalsIgnoreCase("F")) {col = 5;}
+			else if(parts[0].equalsIgnoreCase("G")) {col = 6;}
+			else if(parts[0].equalsIgnoreCase("H")) {col = 7;}
+			if(isValidMove(row, col, Board.B)) {        		
+				makeMove(row, col, Board.B);
+			}
+			else{
 				System.out.println("Invalid Entrance, please try again");
 			}
+		} catch (IndexOutOfBoundsException e) {
+			System.out.println("Invalid Entrance, please try again");
+		} catch (NumberFormatException ex) {
+			System.out.println("Invalid Entrance, please try again");
 		}
 	}
 	
@@ -469,127 +459,59 @@ public class Board
 				value += gameBoard[i][j] * gradeBoard[i][j];
 			}
 		}
+		
 		//MOBILITY
-		/*	
+		ArrayList<Board> WMobility = new ArrayList<Board>(getChildren(W));	//available W moves
+		ArrayList<Board> WCornerMobility = new ArrayList<Board>();			//available W corner moves
+		for (Board child : WMobility){
+			int row = child.lastMove.getRow();
+			int col = child.lastMove.getCol();
+			if (row < 2 && col < 2 || row < 2 && col > 6 || row > 6 && col < 2 || row > 6 && col > 6){
+				WCornerMobility.add(child);
+			}
+		}
+		ArrayList<Board> BMobility = new ArrayList<Board>(getChildren(B));	//available B moves
+		ArrayList<Board> BCornerMobility = new ArrayList<Board>();			//available B corner moves
+		for (Board child : BMobility){
+			int row = child.lastMove.getRow();
+			int col = child.lastMove.getCol();
+			if (row < 2 && col < 2 || row < 2 && col > 6 || row > 6 && col < 2 || row > 6 && col > 6){
+				BCornerMobility.add(child);
+			}
+		}
+		
+		if(WMobility.size() + BMobility.size()!=0){
+			//System.out.println("mob");
+			value += 10*(WCornerMobility.size() - BCornerMobility.size()) + ((WMobility.size() - BMobility.size())/(WMobility.size() + BMobility.size())) ;
+		}
+		
 		//Having more pieces than opponent is values, especially late game
 		if(Pawns(W) + Pawns(B) > 60 && getWinner() == W) {
 			value += 1000;
 		}
-			
-		//Minimize opponent's moves mid to late game
-		if (Pawns(W) + Pawns(B) < 40) {
-			ArrayList<Board> children = new ArrayList<Board>(getChildren(B));
-			if(children.size() == 0) {
-				value += 5;
-			} else if (children.size() < 3) {
-				value += 3;
-			} else {
-				value -= children.size();
-			}
-		}
 		
-		/*
-	
-		if (getWinner() == letter && Pawns(W) + Pawns(B) > 55) {
-			return 10000;
-		}
-		
-		//CORNER STABILITY
-		if (gameBoard[0][0] == letter || (lastLetterPlayed != letter && isValid(0,0,letter))) {
-			value += 400;
-		}
-		if (gameBoard[7][7] == letter || (lastLetterPlayed != letter && isValid(7,7,letter))) {
-			value += 400;
-		}
-		if (gameBoard[0][7] == letter || (lastLetterPlayed != letter && isValid(0,7,letter))) {
-			value += 400;
-		}
-		if (gameBoard[7][0] == letter || (lastLetterPlayed != letter && isValid(7,0,letter))) {
-			value += 400;
-		}
-				
-		//Letting corners for the opponent is bad
-		if (gameBoard[0][1] == letter && isValid(0, 0, opp)) {
-			value += 200;
-		}
-		if (gameBoard[1][0] == letter && isValid(0, 0, opp)) {
-			value += 200;
-		}
-		if (gameBoard[1][1] == letter && gameBoard[0][0] == EMPTY) {
-			value -= 200;
-		}
-		if (gameBoard[6][7] == letter && isValid(7, 7, opp)) {
-			value += 200;
-		}
-		if (gameBoard[7][6] == letter && isValid(7, 7, opp)) {
-			value += 200;
-		}
-		if (gameBoard[6][6] == letter && gameBoard[7][7] == EMPTY) {
-			value -= 200;
-		}
-		if (gameBoard[1][7] == letter && isValid(0, 7, opp)) {
-			value += 200;
-		}
-		if (gameBoard[0][6] == letter && isValid(0, 7, opp)) {
-			value += 200;
-		}
-		if (gameBoard[1][6] == letter && gameBoard[0][7] == EMPTY) {
-			value -= 200;
-		}
-		if (gameBoard[7][1] == letter && isValid(7, 0, opp)) {
-			value += 200;
-		}
-		if (gameBoard[6][0] == letter && isValid(7, 0, opp)) {
-			value += 200;
-		}
-		if (gameBoard[6][1] == letter && gameBoard[7][0] == EMPTY) {
-			value -= 200;
-		}
-		
-		//EDGE STABILITY
-		for(int row = 0; row < 8; row++) {
-			if (gameBoard[row][0] == letter) {
-				value += 20;
-			}
-			if (gameBoard[row][7] == letter) {
-				value += 20;
-			}
-		}
-		for(int col = 0; col < 8; col++) {
-			if (gameBoard[0][col] == letter) {
-				value += 20;
-			}
-			if (gameBoard[7][col] == letter) {
-				value += 20;
-			}
-		}
-		
-		
-				
-		
-	
 		//Try to have one piece in each col/row midgame
 		if (Pawns(W) + Pawns(B) > 20 && Pawns(W) + Pawns(B) < 50) {
 			for(int row = 0; row < 8; row++) {
 				int sum = 0;
 				for(int col = 0; col < 8; col++) {
-					if (gameBoard[row][col] == letter) {
+					if (gameBoard[row][col] == W) {
 						sum++;
 					}
 				}
 				if (sum > 0) {
-					value += 10;
+					value += 5;
 				}
 			}
 			for(int col = 0; col < 8; col++) {
 				int sum = 0;
 				for(int row = 0; row < 8; row++) {
-					if (gameBoard[row][col] == letter) {
+					if (gameBoard[row][col] == W) {
 						sum++;
 					}
 				}
 				if (sum > 0) {
-					value += 10;
+					value += 5;
 				}
 			}			
 		}
@@ -597,19 +519,19 @@ public class Board
 		//Secured rows are valuable
 		for(int col = 0; col < 8; col+=7) {
 			for(int row = 0; row < 8; row++) {
-				if (gameBoard[0][col] == letter) {
-					if(gameBoard[row][col] != letter) {
+				if (gameBoard[0][col] == W) {
+					if(gameBoard[row][col] != W) {
 						break;
 					}
-					value += 20;
+					value += 5;
 				}
 			}
 			for(int row = 8 - 1; row >= 0; row--) {
-				if (gameBoard[7][col] == letter) {
-					if(gameBoard[row][col] != letter) {
+				if (gameBoard[7][col] == W) {
+					if(gameBoard[row][col] != W) {
 						break;
 					}
-					value += 20;
+					value += 5;
 				}
 			}
 		}
@@ -617,23 +539,23 @@ public class Board
 		//Secured cols are valuable
 		for(int row = 0; row < 8; row+=7) {
 			for(int col = 0; col < 8; col++) {
-				if (gameBoard[row][0] == letter) {
-					if(gameBoard[row][col] != letter) {
+				if (gameBoard[row][0] == W) {
+					if(gameBoard[row][col] != W) {
 						break;
 					}
-					value += 20;
+					value += 5;
 				}
 			}
 			for(int col = 8 - 1; col >= 0; col--) {
-				if (gameBoard[7][col] == letter) {
-					if(gameBoard[row][col] != letter) {
+				if (gameBoard[7][col] == W) {
+					if(gameBoard[row][col] != W) {
 						break;
 					}
-					value += 20;
+					value += 5;
 				}
 			}
 		}
-		*/
+			
 		return value;
 	}
 
